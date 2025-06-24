@@ -1,0 +1,575 @@
+/* Estilos base de Yii y proyecto - Modo Oscuro (siten.css) - Gris Carbón Claro */
+main > .container {
+    padding: 70px 15px 20px;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #3c3c3c;
+    color: #DCDCDC;
+    line-height: 1.6;
+}
+.navbar {
+    background-color: #3c3c3c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    position: relative;
+}
+.navbar-brand img {
+    max-height: 40px;
+}
+.navbar-nav .nav-link {
+    color: #DCDCDC;
+    font-weight: 500;
+    margin-left: 1rem;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover {
+    color: #BB86FC;
+}
+.navbar-azul {
+    background-color: #616161 !important;
+}
+.btn-primary {
+    background-color: #BB86FC;
+    border-color: #BB86FC;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.btn-primary:hover {
+    background-color: #9C27B0;
+    border-color: #9C27B0;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.btn-secondary {
+    background-color: #757575;
+    border-color: #DCDCDC;
+    color: #DCDCDC;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn-secondary:hover {
+    background-color: #8A8A8A;
+    transform: translateY(-2px);
+}
+.form-control {
+    border: 1px solid #757575;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #757575;
+    color: #DCDCDC;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-control:focus {
+    border-color: #BB86FC;
+    box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25);
+    background-color: #757575;
+    color: #DCDCDC;
+}
+.form-label {
+    font-weight: 500;
+    color: #DCDCDC;
+    margin-bottom: 0.5rem;
+}
+.form-check-label {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #DCDCDC;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #757575 !important;
+    padding: 10px 20px;
+    position: relative;
+    z-index: 2;
+}
+.banner-section {
+    display: flex;
+    align-items: center;
+}
+.logo-section,
+.logos-section {
+    flex: 1;
+}
+.empty-section {
+    flex: 2;
+}
+.logo {
+    max-height: 50px;
+    margin: 0 10px;
+}
+.footer {
+    background-color: #616161 !important;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 2rem;
+    border-bottom: 5px solid #757575;
+}
+.footer a {
+    color: #BB86FC;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.footer a:hover {
+    color: #9C27B0;
+}
+.footer .social-icons a {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+.social_block {
+    position: relative;
+    min-height: 44px;
+    border-bottom: 1px solid #757575;
+    background: #757575;
+    margin-top: 30px;
+}
+.wraper {
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+}
+.social_block p {
+    color: #DCDCDC;
+    line-height: 44px;
+    padding-left: 0;
+}
+.social_block ul {
+    position: absolute;
+    top: 0;
+    right: 80px;
+}
+.social_block ul li {
+    float: left;
+    min-height: 44px;
+    font: bold 14px/44px 'Soberana Sans';
+}
+.footer .logo-pie-pagina {
+    width: 201px;
+    height: 71px;
+    filter: grayscale(0%);
+    transition: filter 0.5s ease-in-out;
+}
+.copyright {
+    border-top: 1px solid #757575;
+    margin-top: 20px;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.modal-content {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background-color: #757575;
+}
+.modal-title {
+    color: #DCDCDC;
+}
+.modal-header {
+    border-bottom: 1px solid #8A8A8A;
+    background-color: #616161;
+}
+.modal-footer {
+    border-top: 1px solid #8A8A8A;
+}
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background-color: #757575;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+.card-title {
+    color: #DCDCDC;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+h2, h5 {
+    color: #DCDCDC;
+}
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+a.asc:after, a.desc:after {
+    content: '';
+    left: 3px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: solid 5px transparent;
+    margin: 4px 4px 2px 4px;
+    background: transparent;
+}
+a.asc:after {
+    border-bottom: solid 7px #DCDCDC;
+    border-top-width: 0;
+}
+a.desc:after {
+    border-top: solid 7px #DCDCDC;
+    border-bottom-width: 0;
+}
+.grid-view th {
+    white-space: nowrap;
+}
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+.error-summary {
+    color: #a94442;
+    background: #8A8A8A;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+.nav li > form > button.logout {
+    padding-top: 7px;
+    color: #DCDCDC;
+}
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+    color: #BB86FC;
+}
+.nav > li > form > button.logout:focus {
+    outline: none;
+}
+@media (max-width: 767px) {
+    .nav li > form > button.logout {
+        display: block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 0;
+    }
+}
+@media (max-width: 768px) {
+    .navbar-nav .nav-link {
+        margin-left: 0;
+    }
+    .footer {
+        text-align: center;
+    }
+    .footer .social-icons {
+        margin-top: 1rem;
+    }
+    .logo {
+        max-height: 40px;
+    }
+    .empty-section {
+        flex: 1;
+    }
+}
+
+/* Estilos para Idea 2: Botones Flotantes con Animación de Ícono */
+.floating-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #DCDCDC;
+}
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.floating-btn i {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.floating-btn:hover i {
+    transform: rotate(360deg) scale(1.2);
+    color: #9C27B0;
+}
+.btn-label {
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-align: center;
+    color: #DCDCDC;
+}
+@media (max-width: 768px) {
+    .floating-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+    }
+    .btn-label {
+        font-size: 1rem;
+    }
+}
+
+/* Estilos para el Botón de Modo Oscuro (adaptado de https://entreunosyceros.net) */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+.theme-switch {
+    display: none;
+}
+.theme-switch-label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #757575;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.theme-switch-label::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #DCDCDC;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+.theme-switch:checked + .theme-switch-label {
+    background-color: #BB86FC;
+}
+.theme-switch:checked + .theme-switch-label::after {
+    transform: translateX(26px);
+}
+.theme-switch-icon {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    color: #DCDCDC;
+    transition: color 0.3s ease;
+}
+.theme-switch:checked ~ .theme-switch-icon .bi-sun-fill {
+    display: none;
+}
+.theme-switch:not(:checked) ~ .theme-switch-icon .bi-moon-fill {
+    display: none;
+}
+/* ============================================= */
+/* == Corrección para Filtros de GridView     == */
+/* ============================================= */
+
+/*
+  Esta regla se aplica específicamente a los campos de texto
+  dentro de la fila de filtros (.filters) del GridView.
+*/
+
+.grid-view .filters input.form-control {
+    /* Cambiamos el fondo para que se integre con el tema oscuro */
+    background-color: #616161; /* Fondo principal para un efecto "hundido" */
+    
+    /* Cambiamos el color del borde para definir el campo */
+    border-color: #8A8A8A; /* Borde sutil, pero visible */
+    
+    /* Aseguramos que el texto sea claro */
+    color: #DCDCDC;
+}
+
+/* Estilo al seleccionar (focus) la barra de búsqueda */
+.grid-view .filters input.form-control:focus {
+    background-color: #616161;
+    border-color: #BB86FC; /* Borde con el color principal del tema */
+    box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25); /* Resplandor de foco */
+}
+
+/* --- ESTILOS PARA ESCÁNER QR (MODO OSCURO) --- */
+.qr-scanner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    text-align: center;
+}
+
+.qr-scanner-frame {
+    padding: 1.5rem;
+    background-color: #757575; /* Color de banner oscuro */
+    border: 1px solid #8A8A8A; /* Borde sutil oscuro */
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+}
+
+#qr-reader {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 0.5rem; 
+    background-color: #616161; /* Fondo principal oscuro */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #A0A0A0; /* Texto de carga más claro */
+}
+
+#qr-reader video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.scanner-instructions {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #A0A0A0; /* Texto de instrucción más claro */
+}
+
+#qr-result-link {
+    font-family: monospace;
+    font-size: 1rem;
+    word-break: break-all;
+    padding: 15px;
+    border-radius: 0.375rem;
+    background-color: rgba(255,255,255,0.1);
+    border: 1px solid #8A8A8A;
+}
+/* ============================================= */
+/* == Estilos para GridView y Paginación      == */
+/* ============================================= */
+
+/* Encabezado de la tabla */
+.grid-view .table thead th {
+    background-color: #757575; /* Coincide con el color del banner */
+    font-weight: 500;
+    color: #DCDCDC;
+    border-bottom: 2px solid #8A8A8A;
+}
+
+/* Efecto hover en las filas de la tabla */
+.table-hover > tbody > tr:hover > * {
+    background-color: #6D6D6D; /* Un gris ligeramente más claro */
+    color: #FFFFFF;
+}
+
+/* Contenedor y enlaces de paginación */
+.pagination .page-link {
+    transition: all 0.2s ease;
+    border-radius: 0.375rem;
+    margin: 0 3px;
+    background-color: #757575;
+    border-color: #8A8A8A;
+    color: #DCDCDC;
+}
+
+.pagination .page-link:hover {
+    background-color: #8A8A8A;
+    border-color: #757575;
+}
+
+.pagination .page-link:focus {
+    box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25); /* Sombra de foco principal */
+}
+
+/* Botón de página activa */
+.pagination .page-item.active .page-link {
+    background-color: #BB86FC; /* Color principal */
+    border-color: #BB86FC;
+    color: #2D2D2D; /* Texto oscuro para mejor contraste sobre el fondo claro */
+}
+
+/* Botones deshabilitados */
+.pagination .page-item.disabled .page-link {
+    background-color: #616161;
+    color: #8A8A8A;
+    border-color: #757575;
+}
+
+/* Resumen de la paginación (ej: "Mostrando 1-10 de 25") */
+.grid-view .summary {
+    font-size: 0.9rem;
+    color: #B0B0B0; /* Gris claro para buena legibilidad */
+    padding: 0.5rem 0;
+}
+/* ============================================= */
+/* ==   Ajustes de Contraste y Colores        == */
+/* ============================================= */
+
+/* --- 1. Ajuste de Fondo para Celdas de la Tabla --- */
+/* Se asigna un fondo específico a las celdas para diferenciarlas del fondo principal de la página. */
+.grid-view .table > tbody > tr > td {
+    background-color: #6D6D6D; /* Gris intermedio, ligeramente más claro que el fondo principal */
+    border-top: 1px solid #757575; /* Borde sutil para separar filas */
+}
+
+/* El hover ahora es más notorio, aclarando la celda al color del encabezado */
+.table-hover > tbody > tr:hover > * {
+    background-color: #757575; 
+    color: #FFFFFF;
+}
+
+
+/* --- 2. Nuevo Color para Enlaces (URL/ref) --- */
+/* Se cambia el color morado por un cian vibrante para mayor destaque y legibilidad. */
+a, 
+.footer a {
+    color: #fefdfed2; /* Cian vibrante */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover, 
+.footer a:hover {
+    color: #4DD0E1; /* Cian más claro al pasar el cursor */
+}
+
+/* Se actualiza el color del botón de logout para mantener la consistencia */
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+    color: #00BCD4; /* Aplicar el nuevo color de enlace */
+}
+/* =================================================================== */
+/* == SOLUCIÓN DEFINITIVA PARA CELDA DE FILTRO BLANCA               == */
+/* =================================================================== */
+
+/*
+  Esta regla fuerza el color de fondo de la CELDA que contiene
+  el campo de búsqueda, eliminando el fondo blanco que desentona.
+  Uso los colores de tu archivo original.
+*/
+.grid-view .filters td {
+    background-color: #6D6D6D !important; /* Color del encabezado de la tabla */
+}
+
+/*
+  Aseguramos que el input dentro de esa celda también tenga el
+  estilo correcto para un efecto de "profundidad".
+*/
+.grid-view .filters input.form-control {
+    background-color: #757575 !important; /* Color del fondo principal de la página */
+    border-color: #5a5a5a !important;
+    color: #DCDCDC !important;
+}
+
+.grid-view .filters input.form-control:focus {
+    background-color: #3c3c3c !important;
+    border-color: #BB86FC !important; /* Color principal al enfocar */
+}
+.breadcrumb-item.active {
+    color: white;
+}
