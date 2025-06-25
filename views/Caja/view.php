@@ -1,80 +1,95 @@
 <?php
+
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-use app\models\Archivo; // Modelo de Archivo
-use app\models\Anaquel; // Modelo de Anaquel
-use app\models\Nivelalmacenamiento; // Modelo de Nivelalmacenamiento
 
 /** @var yii\web\View $this */
 /** @var app\models\Caja $model */
 
-$this->title = 'Caja: ' . $model->caj_codigo;
+$this->title = 'Detalle de Caja: ' . $model->caj_codigo;
 $this->params['breadcrumbs'][] = ['label' => 'Cajas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+\yii\web\YiiAsset::register($this);
 ?>
 <div class="caja-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-<p>
-    <?= Html::a('Update', ['update', 'id' => $model->caj_id], ['class' => 'btn btn-primary']) ?>
-    <?= \yii\helpers\Html::a('Generar QR', ['caja/generar-qr', 'caj_id' => $model->caj_id], [
-        'class' => 'btn btn-primary',
-    ]) ?>
-    <?= Html::a('Delete', ['delete', 'id' => $model->caj_id], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => 'Are you sure you want to delete this item?',
-            'method' => 'post',
-        ],
-    ]) ?>
-</p>
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'caj_id',
-            'caj_codigo',
-            [
-                'attribute' => 'caj_anaquel_id',
-                'label' => 'Anaquel',
-                'value' => $model->cajAnaquel ? $model->cajAnaquel->ana_nombre : 'No asignado',
+    <p>
+        <?= Html::a('Modificar', ['update', 'caj_id' => $model->caj_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'caj_id' => $model->caj_id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => '¿Está seguro de que desea eliminar este elemento?',
+                'method' => 'post',
             ],
-            [
-                'attribute' => 'caj_nivel_id',
-                'label' => 'Nivel',
-                'value' => $model->cajNivel ? $model->cajNivel->niv_nombre : 'No asignado',
-            ],
-        ],
-    ]) ?>
+        ]) ?>
+    </p>
 
-    <h2>Archivos relacionados</h2>
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    ['label' => 'ID', 'attribute' => 'caj_id'],
+                    ['label' => 'Código', 'attribute' => 'caj_codigo'],
+                    ['label' => 'Anaquel', 'attribute' => 'caj_anaquel_id', 'value' => $model->cajAnaquel->ana_nombre ?? '(No asignado)'],
+                    ['label' => 'Nivel', 'attribute' => 'caj_nivel_id', 'value' => $model->cajNivel->niv_nombre ?? '(No asignado)'],
+                ],
+            ]) ?>
+        </div>
+        <div class="col-md-5 text-center">
+            <div class="card p-3">
+                <h5 class="card-title">Código QR</h5>
+                <?php $qrUrl = Url::to(['caja/generar-qr', 'caj_id' => $model->caj_id]); ?>
+                <?= Html::img($qrUrl, ['alt' => 'Código QR', 'class' => 'img-fluid mx-auto d-block', 'style' => 'max-width: 250px;']) ?>
+                <div class="mt-3">
+                    <?= Html::a('<i class="bi bi-download"></i> Descargar QR', $qrUrl, ['class' => 'btn btn-secondary', 'download' => 'qr_caja_' . $model->caj_codigo . '.png']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <h2>Archivos Relacionados</h2>
+    <p class="text-muted">Haz clic en cualquier fila para ver los detalles del archivo.</p>
 
     <?= GridView::widget([
-        'dataProvider' => new yii\data\ActiveDataProvider([
-            'query' => $model->getArchivos(),
-            'pagination' => [
-                'pageSize' => 10, // Puedes ajustar la cantidad de archivos por página
-            ],
-        ]),
+        'dataProvider' => new ActiveDataProvider(['query' => $model->getArchivos()]),
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            $url = Url::to(['archivo/view', 'arc_id' => $model->arc_id]);
+            return ['onclick' => "window.location.href = '{$url}';", 'style' => 'cursor: pointer;', 'title' => 'Ver detalles'];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'arc_codigo',
+            [
+                'label' => 'Alumno (Matrícula)',
+                'attribute' => 'arc_alumno_id',
+                'value' => function ($archivoModel) {
+                    if ($archivoModel->arcAlumno) {
+                        $nombreCompleto = trim($archivoModel->arcAlumno->alu_nombre . ' ' . $archivoModel->arcAlumno->alu_paterno);
+                        return Html::encode($nombreCompleto . ' (' . $archivoModel->arcAlumno->alu_matricula . ')');
+                    }
+                    return '(No asignado)';
+                },
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}', // Solo muestra el botón de "View"
+                'template' => '{download}',
+                'header' => 'Descargar',
                 'buttons' => [
-                    'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ['archivo/view', 'arc_id' => $model->arc_id], [
-                            'class' => 'btn btn-info',
-                            'title' => 'View Details',
-                            'data-pjax' => '0', // Opcional para evitar el uso de PJAX
-                        ]);
+                    'download' => function ($url, $model, $key) {
+                        return Html::a('<i class="bi bi-download"></i>',
+                            ['archivo/download', 'id' => $model->arc_id],
+                            ['class' => 'btn btn-success btn-sm', 'title' => 'Descargar Archivo', 'data-pjax' => '0', 'onclick' => 'event.stopPropagation();']
+                        );
                     },
                 ],
             ],
         ],
     ]) ?>
-
 </div>

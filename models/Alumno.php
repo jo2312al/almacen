@@ -20,6 +20,7 @@ use Yii;
  * @property Carrera $aluCarrera
  * @property Generacion $aluGeneracion
  * @property Servicio $aluServicio
+ * @property Archivo[] $archivos
  */
 class Alumno extends \yii\db\ActiveRecord
 {
@@ -38,6 +39,8 @@ class Alumno extends \yii\db\ActiveRecord
     {
         return [
             [['alu_matricula', 'alu_nombre', 'alu_paterno', 'alu_materno'], 'required'],
+            // Regla para evitar matrículas duplicadas
+            ['alu_matricula', 'unique', 'message' => 'Esta matrícula ya ha sido registrada en el sistema.'],
             [['alu_generacion_id', 'alu_servicio_id', 'alu_carrera_id'], 'integer'],
             [['alu_ingreso'], 'safe'],
             [['alu_matricula'], 'string', 'max' => 8],
@@ -53,51 +56,34 @@ class Alumno extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
+        // Traducción de etiquetas para una mejor experiencia de usuario
         return [
-            'alu_id' => 'Alu ID',
-            'alu_matricula' => 'Alu Matricula',
-            'alu_nombre' => 'Alu Nombre',
-            'alu_paterno' => 'Alu Paterno',
-            'alu_materno' => 'Alu Materno',
-            'alu_generacion_id' => 'Alu Generacion ID',
-            'alu_ingreso' => 'Alu Ingreso',
-            'alu_servicio_id' => 'Alu Servicio ID',
-            'alu_carrera_id' => 'Alu Carrera ID',
+            'alu_id' => 'ID Alumno',
+            'alu_matricula' => 'Matrícula',
+            'alu_nombre' => 'Nombre(s)',
+            'alu_paterno' => 'Apellido Paterno',
+            'alu_materno' => 'Apellido Materno',
+            'alu_generacion_id' => 'Generación',
+            'alu_ingreso' => 'Año de Ingreso',
+            'alu_servicio_id' => 'Servicio',
+            'alu_carrera_id' => 'Carrera',
         ];
     }
 
-    /**
-     * Gets query for [[AluCarrera]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAluCarrera()
-    {
-        return $this->hasOne(Carrera::class, ['car_id' => 'alu_carrera_id']);
-    }
+    // --- RELACIONES (sin cambios) ---
+    public function getAluCarrera(){ return $this->hasOne(Carrera::class, ['car_id' => 'alu_carrera_id']); }
+    public function getAluGeneracion(){ return $this->hasOne(Generacion::class, ['gen_id' => 'alu_generacion_id']); }
+    public function getAluServicio(){ return $this->hasOne(Servicio::class, ['ser_id' => 'alu_servicio_id']); }
+    public function getArchivos(){ return $this->hasMany(Archivo::class, ['arc_alumno_id' => 'alu_id']); }
 
     /**
-     * Gets query for [[AluGeneracion]].
-     *
-     * @return \yii\db\ActiveQuery
+     * ===================================================================
+     * FUNCIÓN FALTANTE AÑADIDA
+     * Devuelve el nombre completo del alumno en el orden correcto.
+     * ===================================================================
      */
-    public function getAluGeneracion()
+    public function getNombreCompleto()
     {
-        return $this->hasOne(Generacion::class, ['gen_id' => 'alu_generacion_id']);
+        return trim($this->alu_nombre . ' ' . $this->alu_paterno . ' ' . $this->alu_materno);
     }
-
-    /**
-     * Gets query for [[AluServicio]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAluServicio()
-    {
-        return $this->hasOne(Servicio::class, ['ser_id' => 'alu_servicio_id']);
-    }
-    public function getArchivos()
-{
-    return $this->hasMany(Archivo::class, ['arc_alumno_id' => 'alu_id']);
-}
-
 }

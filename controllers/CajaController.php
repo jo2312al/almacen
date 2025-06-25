@@ -142,7 +142,7 @@ class CajaController extends Controller
             throw new \yii\web\HttpException(500, 'No se pudo generar el código QR.');
         }
     }
-
+    
 
     private function generarCodigoCaja($anaquelId, $nivelId)
     {

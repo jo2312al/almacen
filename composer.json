@@ -27,7 +27,11 @@
         "pendalff/phpqrcode": "^1.0",
         "tecnickcom/tcpdf": "^6.9",
         "2amigos/qrcode-library": "3.1.0",
-        "yiisoft/yii2-bootstrap": "^2.0@beta"
+        "yiisoft/yii2-bootstrap": "^2.0@beta",
+        "hail812/yii2-adminlte3": "^1.1",
+        "setasign/fpdf": "^1.8",
+        "setasign/fpdi": "^1.6",
+        "guzzlehttp/guzzle": "^7.9"
         
     },
     "require-dev": {

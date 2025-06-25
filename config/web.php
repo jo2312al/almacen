@@ -1,4 +1,5 @@
 <?php
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -8,20 +9,37 @@ $config = [
     'bootstrap' => ['log'],
     'language' => 'es-ES', // Idioma de la aplicación
 
-    // 1. RUTA POR DEFECTO: Asegura que la página de inicio sea site/index
+    // RUTA POR DEFECTO:
     'defaultRoute' => 'site/index',
     
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    
+    // <-- MODIFICADO: Se registra el nuevo módulo 'admin'
+    'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+        ],
+        'user-management' => [
+            'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+            // 'enableRegistration' => true,
+            'on beforeAction' => function(yii\base\ActionEvent $event) {
+                if ($event->action->uniqueId == 'user-management/auth/login') {
+                    $event->action->controller->layout = 'loginLayout.php';
+                };
+            },
+        ],
+        'pdfjs' => [
+            'class' => \diecoding\pdfjs\Module::class,
+        ],
+    ],
+
     'components' => [
         'view' => [
-            'theme' => [
-                'pathMap' => [
-                    '@app/views' => '@app/views',
-                ],
-            ],
+            // El 'theme' ya no es necesario aquí, porque el layout se define
+            // a nivel de módulo para el admin y a nivel de aplicación para el resto.
         ],
         'request' => [
             'cookieValidationKey' => 'zGKvViRlv_fHAO2uZFmMgliGG-mbky_F',
@@ -36,20 +54,15 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         
-        // 2. CONFIGURACIÓN DEL USUARIO (MODIFICADA)
+        // <-- MODIFICADO: Lógica de redirección para el rol 'admin'
         'user' => [
             'class' => 'webvimark\modules\UserManagement\components\UserConfig',
-            
-            // ¡IMPORTANTE! Esto le dice a Yii que cuando se requiera login,
-            // debe ir a la página principal donde está nuestro modal.
             'loginUrl' => ['/site/index'],
-
-            // Esta es la lógica que ya tenías para redirigir DESPUÉS de un login exitoso.
-            // Funciona perfectamente con este nuevo enfoque.
             'on afterLogin' => function ($event) {
                 $user = Yii::$app->user;
                 if ($user->can('admin')) {
-                    Yii::$app->response->redirect(['/site/index'])->send();
+                    // Ahora redirige al dashboard de AdminLTE3
+                    Yii::$app->response->redirect(['/admin'])->send();
                 } elseif ($user->can('prueba')) {
                     Yii::$app->response->redirect(['/site/index-usuario'])->send();
                 } elseif ($user->can('viewer')) {
@@ -88,11 +101,17 @@ $config = [
         ],
         'db' => $db,
         
+        // <-- NUEVO: Reglas para que '/admin' funcione correctamente
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                // Aquí puedes agregar reglas personalizadas si es necesario
+                // Reglas para el módulo de administración
+                'admin' => 'admin/default/index', // URL base /admin
+                'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
+                
+                // Otras reglas que necesites para la parte pública
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
     ],
@@ -104,25 +123,6 @@ $config = [
         }
     },
     'params' => $params,
-    'modules' => [
-        'user-management' => [
-            'class' => 'webvimark\modules\UserManagement\UserManagementModule',
-
-            // 3. MAPA DE CONTROLADOR (AÑADIDO)
-            // Le dice a Webvimark que use nuestro controlador personalizado para la autenticación.
-            
-
-            // 'enableRegistration' => true,
-            'on beforeAction' => function(yii\base\ActionEvent $event) {
-                if ($event->action->uniqueId == 'user-management/auth/login') {
-                    $event->action->controller->layout = 'loginLayout.php';
-                };
-            },
-        ],
-        'pdfjs' => [
-            'class' => \diecoding\pdfjs\Module::class,
-        ],
-    ],
 ];
 
 if (YII_ENV_DEV) {
