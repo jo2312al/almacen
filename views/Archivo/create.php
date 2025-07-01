@@ -7,6 +7,7 @@ use yii\helpers\Url;
 /** @var app\models\Archivo $model */
 /** @var app\models\Alumno $alumnoModel */
 
+// Título y breadcrumbs traducidos
 $this->title = 'Registrar Nuevo Archivo';
 $this->params['breadcrumbs'][] = ['label' => 'Archivos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -23,27 +24,30 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <!-- SPINNER DE CARGA GLOBAL -->
+<!-- Este spinner se mostrará mientras se procesa el PDF y se guarda el alumno -->
 <div id="loading-spinner" class="loader-wrapper d-none">
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Procesando...</span>
     </div>
 </div>
 
-<!-- Estilos para el spinner -->
+<!-- Estilos para el spinner, usando las variables de color del tema -->
 <style>
     .loader-wrapper {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
         display: flex; justify-content: center; align-items: center;
-        z-index: 1060;
+        z-index: 1060; /* Asegura que esté por encima del modal */
     }
     .spinner-border {
         width: 3.5rem; height: 3.5rem;
+        /* El color se tomará de la variable de color primario del tema actual (claro/oscuro) */
         color: var(--primary-color, #2ECC71); 
     }
 </style>
 
 <!-- MODAL PARA REVISIÓN/CREACIÓN DE ALUMNO -->
+<!-- El contenido de este modal se cargará dinámicamente con AJAX -->
 <div class="modal fade" id="alumno-modal" tabindex="-1" aria-labelledby="alumnoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
