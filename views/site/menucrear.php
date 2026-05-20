@@ -11,8 +11,8 @@ $this->title = 'My Yii Application';
 <div class="site-index">
     <div class="d-flex justify-content-center align-items-center" style="gap: 40px; height: fit-content;">
         <div class="d-flex flex-column align-items-center">
-            <a href="<?= Url::to(['/alumno/create']) ?>"><button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;"><i class="bi bi-person-plus-fill" style="font-size: 2.5rem;"></i></button></a>
-            <label class="mt-2 text-center">Alumno</label>
+            <a href="<?= Url::to(['/archivo/create']) ?>"><button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;"><i class="bi bi-person-plus-fill" style="font-size: 2.5rem;"></i></button></a>
+            <label class="mt-2 text-center">Archivo</label>
         </div>
         <div class="d-flex flex-column align-items-center">
             <a href="<?= Url::to(['/caja/create']) ?>"><button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;"><i class="bi bi-box2-fill" style="font-size: 2.5rem;"></i></button></a>

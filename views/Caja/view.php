@@ -58,38 +58,48 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2>Archivos Relacionados</h2>
     <p class="text-muted">Haz clic en cualquier fila para ver los detalles del archivo.</p>
 
-    <?= GridView::widget([
-        'dataProvider' => new ActiveDataProvider(['query' => $model->getArchivos()]),
-        'rowOptions' => function ($model, $key, $index, $grid) {
-            $url = Url::to(['archivo/view', 'arc_id' => $model->arc_id]);
-            return ['onclick' => "window.location.href = '{$url}';", 'style' => 'cursor: pointer;', 'title' => 'Ver detalles'];
-        },
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'label' => 'Alumno (Matrícula)',
-                'attribute' => 'arc_alumno_id',
-                'value' => function ($archivoModel) {
-                    if ($archivoModel->arcAlumno) {
-                        $nombreCompleto = trim($archivoModel->arcAlumno->alu_nombre . ' ' . $archivoModel->arcAlumno->alu_paterno);
-                        return Html::encode($nombreCompleto . ' (' . $archivoModel->arcAlumno->alu_matricula . ')');
-                    }
-                    return '(No asignado)';
-                },
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{download}',
-                'header' => 'Descargar',
-                'buttons' => [
-                    'download' => function ($url, $model, $key) {
-                        return Html::a('<i class="bi bi-download"></i>',
-                            ['archivo/download', 'id' => $model->arc_id],
-                            ['class' => 'btn btn-success btn-sm', 'title' => 'Descargar Archivo', 'data-pjax' => '0', 'onclick' => 'event.stopPropagation();']
-                        );
+    <?php
+        // OPTIMIZACIÓN: Pre-cargamos la relación 'arcAlumno' para evitar consultas N+1.
+        $queryArchivos = $model->getArchivos()->with('arcAlumno');
+        
+        // Creamos el DataProvider con la consulta optimizada.
+        $dataProviderArchivos = new ActiveDataProvider(['query' => $queryArchivos]);
+
+        echo GridView::widget([
+            'dataProvider' => $dataProviderArchivos, // Usamos el nuevo DataProvider
+            'rowOptions' => function ($model, $key, $index, $grid) {
+                $url = Url::to(['archivo/view', 'arc_id' => $model->arc_id]);
+                return ['onclick' => "window.location.href = '{$url}';", 'style' => 'cursor: pointer;', 'title' => 'Ver detalles'];
+            },
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'label' => 'Alumno (Matrícula)',
+                    'attribute' => 'arc_alumno_id', // El atributo para ordenar sigue siendo la FK
+                    'value' => function ($archivoModel) {
+                        // Ahora $archivoModel->arcAlumno debería estar cargado y no ser nulo
+                        if ($archivoModel->arcAlumno) {
+                            // Usamos la función getNombreCompleto() que añadiste al modelo Alumno
+                            return Html::encode($archivoModel->arcAlumno->getNombreCompleto() . ' (' . $archivoModel->arcAlumno->alu_matricula . ')');
+                        }
+                        return '(No asignado)';
                     },
+                    'format' => 'raw', // Usamos raw para que Html::encode funcione correctamente
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{download}',
+                    'header' => 'Descargar',
+                    'buttons' => [
+                        'download' => function ($url, $model, $key) {
+                            return Html::a('<i class="bi bi-download"></i>',
+                                ['archivo/download', 'id' => $model->arc_id],
+                                ['class' => 'btn btn-success btn-sm', 'title' => 'Descargar Archivo', 'data-pjax' => '0', 'onclick' => 'event.stopPropagation();']
+                            );
+                        },
+                    ],
                 ],
             ],
-        ],
-    ]) ?>
+        ]); 
+    ?>
 </div>

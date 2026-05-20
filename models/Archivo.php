@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile; // Asegúrate de que esta línea esté presente
 
 /**
  * This is the model class for table "archivo".
@@ -27,7 +28,10 @@ use Yii;
  */
 class Archivo extends \yii\db\ActiveRecord
 {
-    public $file; // Atributo virtual para el campo de archivo
+    /**
+     * @var UploadedFile Atributo virtual para manejar la subida del archivo.
+     */
+    public $file;
 
     /**
      * {@inheritdoc}
@@ -38,16 +42,36 @@ class Archivo extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * ===================================================================
+     * FUNCIÓN 'RULES' CORREGIDA
+     * - Se quita 'arc_ruta' de la regla 'required'.
+     * - Se añade 'file' como requerido en el escenario 'create'.
+     * - Se añade un validador de tipo 'file'.
+     * ===================================================================
      */
     public function rules()
     {
         return [
-            [['arc_caja_id', 'arc_alumno_id', 'arc_fondo_id', 'arc_clave_programatica_id', 'arc_area_generadora_id', 'arc_seccion_serie_id'], 'default', 'value' => null],
-            [['arc_codigo', 'arc_nombre_documento', 'arc_ruta'], 'required'],
+            // --- REGLAS DE DATOS ---
+            // Campos que son requeridos para que el registro tenga sentido.
+            [['arc_codigo', 'arc_nombre_documento', 'arc_alumno_id', 'arc_caja_id'], 'required', 'message' => '{attribute} no puede estar vacío.'],
+            
+            // Campos que deben ser números enteros.
             [['arc_caja_id', 'arc_alumno_id', 'arc_fondo_id', 'arc_clave_programatica_id', 'arc_area_generadora_id', 'arc_seccion_serie_id'], 'integer'],
+            
+            // Longitud máxima de los campos de texto.
             [['arc_codigo', 'arc_nombre_documento'], 'string', 'max' => 100],
             [['arc_ruta'], 'string', 'max' => 255],
+
+            // --- REGLAS DE ARCHIVO ---
+            // El archivo (file) es requerido solo al crear. No al actualizar.
+            [['file'], 'required', 'on' => 'create', 'message' => 'Debe seleccionar un archivo PDF para subir.'],
+
+            // Validador de archivo: solo permite PDFs y con un tamaño máximo de 10MB (ajustable).
+            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf', 'maxSize' => 1024 * 1024 * 10, 'on' => 'create'],
+
+            // --- REGLAS DE RELACIONES (EXIST) ---
+            // Aseguran que los IDs existan en sus tablas correspondientes.
             [['arc_alumno_id'], 'exist', 'skipOnError' => true, 'targetClass' => Alumno::class, 'targetAttribute' => ['arc_alumno_id' => 'alu_id']],
             [['arc_area_generadora_id'], 'exist', 'skipOnError' => true, 'targetClass' => AreaGeneradora::class, 'targetAttribute' => ['arc_area_generadora_id' => 'are_id']],
             [['arc_caja_id'], 'exist', 'skipOnError' => true, 'targetClass' => Caja::class, 'targetAttribute' => ['arc_caja_id' => 'caj_id']],
@@ -63,18 +87,21 @@ class Archivo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'arc_id' => 'Arc ID',
-            'arc_codigo' => 'Arc Codigo',
-            'arc_nombre_documento' => 'Arc Nombre Documento',
-            'arc_caja_id' => 'Arc Caja ID',
-            'arc_alumno_id' => 'Arc Alumno ID',
-            'arc_ruta' => 'Arc Ruta',
-            'arc_fondo_id' => 'Arc Fondo ID',
-            'arc_clave_programatica_id' => 'Arc Clave Programatica ID',
-            'arc_area_generadora_id' => 'Arc Area Generadora ID',
-            'arc_seccion_serie_id' => 'Arc Seccion Serie ID',
+            'arc_id' => 'ID',
+            'arc_codigo' => 'Código Clasificador',
+            'arc_nombre_documento' => 'Nombre del Documento',
+            'arc_caja_id' => 'Caja',
+            'arc_alumno_id' => 'Alumno',
+            'arc_ruta' => 'Ruta del Archivo',
+            'arc_fondo_id' => 'Fondo',
+            'arc_clave_programatica_id' => 'Clave Programática',
+            'arc_area_generadora_id' => 'Área Generadora',
+            'arc_seccion_serie_id' => 'Sección Serie',
+            'file' => 'Archivo PDF', // Etiqueta para el campo de subida
         ];
     }
+
+    // --- El resto de tus funciones (getArcAlumno, getArcCaja, etc.) permanecen igual ---
 
     /**
      * Gets query for [[ArcAlumno]].

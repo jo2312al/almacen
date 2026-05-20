@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use app\models\Generacion; // Asegúrate de usar el namespace correcto de tu modelo
+use app\models\Generacion;
 use app\models\Servicio;
 use app\models\Carrera;
 
@@ -12,11 +12,13 @@ use app\models\Carrera;
 ?>
 
 <div class="row">
-    <!-- Columna principal con proporción 10 -->
     <div class="col-md-10">
-        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'modal-alumno-form',
+            'options' => ['enctype' => 'multipart/form-data'],
+            'enableAjaxValidation' => false,
+        ]); ?>
 
-        <!-- Primera línea: Matrícula y Nombre completo -->
         <div class="row">
             <div class="col-md-4">
                 <?= $form->field($model, 'alu_matricula')->textInput(['maxlength' => true]) ?>
@@ -34,15 +36,7 @@ use app\models\Carrera;
             </div>
         </div>
 
-        <!-- Segunda línea: Generación, Año de ingreso y Servicio -->
-        <div class="row">
-            <div class="col-md-4">
-                <?= $form->field($model, 'alu_generacion_id')->dropDownList(
-                    ArrayHelper::map(Generacion::find()->all(), 'gen_id', 'gen_nombre'),
-                    ['prompt' => 'Seleccione una generación']
-                ) ?>
-            </div>
-            <div class="col-md-4">
+        <div class="row"> <div class="col-md-4">
                 <?= $form->field($model, 'alu_ingreso')->input('number', ['min' => 1900, 'max' => date('Y'), 'placeholder' => 'Año de ingreso']) ?>
             </div>
             <div class="col-md-4">
@@ -59,7 +53,6 @@ use app\models\Carrera;
             </div>
         </div>
 
-        <!-- Tercera línea: Carrera -->
         <div class="row">
             <div class="col-md-12">
                 <?= $form->field($model, 'alu_carrera_id')->dropDownList(
@@ -69,16 +62,28 @@ use app\models\Carrera;
             </div>
         </div>
 
-        <!-- Botón Guardar -->
         <div class="form-group">
-            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btn-guardar-alumno']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
     </div>
 
-    <!-- Columna secundaria con proporción 2 -->
     <div class="col-md-2">
     </div>
 </div>
 
+<?php
+// --- SCRIPT PARA FORZAR ENVÍO CON ENTER ---
+// Detecta si se presiona una tecla dentro del formulario
+$script = <<< JS
+$('#modal-alumno-form input, #modal-alumno-form select').on('keypress', function(e) {
+    // Si la tecla es Enter (código 13)
+    if (e.which == 13) {
+        e.preventDefault(); // Evita el comportamiento por defecto (saltos de línea o recargas raras)
+        $('#modal-alumno-form').trigger('submit'); // Dispara el evento submit que tu AJAX ya está escuchando
+    }
+});
+JS;
+$this->registerJs($script);
+?>

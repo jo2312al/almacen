@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 use app\models\Alumno;
 use app\models\AlumnoSearch;
@@ -36,24 +37,36 @@ class AlumnoController extends Controller
 
     /**
      * Lists all Alumno models.
+     * @return string
      */
     public function actionIndex()
     {
         $searchModel = new AlumnoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        return $this->render('index', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
      * Displays a single Alumno model.
+     * @param int $alu_id Alu ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($alu_id)
     {
-        return $this->render('view', ['model' => $this->findModel($alu_id)]);
+        return $this->render('view', [
+            'model' => $this->findModel($alu_id),
+        ]);
     }
 
     /**
-     * Creates a new Alumno model. Handles standard and AJAX requests.
+     * Creates a new Alumno model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
@@ -61,7 +74,7 @@ class AlumnoController extends Controller
         $request = Yii::$app->request;
 
         if ($request->isAjax) {
-            // Maneja el envío del formulario desde el modal (petición POST)
+            // Maneja el envío del formulario desde el modal (petición POST) - GUARDAR
             if ($request->isPost) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 if ($model->load($request->post()) && $model->save()) {
@@ -72,8 +85,11 @@ class AlumnoController extends Controller
                     return ['success' => false, 'formHtml' => $this->renderAjax('_form', ['model' => $model])];
                 }
             }
-            // Maneja la carga inicial del formulario en el modal (petición GET)
-            $model->load($request->get(), '');
+            
+            // Maneja la carga inicial del formulario en el modal (petición GET) - PRELLENADO
+            // MODIFICACIÓN AQUÍ: Se eliminó el segundo parámetro '' para que lea el array 'Alumno'
+            $model->load($request->get()); 
+            
             return $this->renderAjax('_form', ['model' => $model]);
         }
         
@@ -85,8 +101,10 @@ class AlumnoController extends Controller
         } else {
             $model->loadDefaultValues();
         }
-    
-        return $this->render('create', ['model' => $model]);
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
     
     /**
@@ -108,11 +126,19 @@ class AlumnoController extends Controller
     public function actionUpdate($alu_id) { /* ... Tu código existente ... */ }
     public function actionDelete($alu_id) { /* ... Tu código existente ... */ }
 
+    /**
+     * Finds the Alumno model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param int $alu_id Alu ID
+     * @return Alumno the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     protected function findModel($alu_id)
     {
         if (($model = Alumno::findOne(['alu_id' => $alu_id])) !== null) {
             return $model;
         }
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
