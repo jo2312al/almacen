@@ -13,6 +13,7 @@ use app\models\Fondo;
 use app\models\SeccionSerie;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 class CargaMasivaService
@@ -21,6 +22,10 @@ class CargaMasivaService
     {
         $batch = new CargaMasiva([
             'car_caja_id' => $form->caja_id,
+            'car_fondo_id' => $form->fondo_id ?: null,
+            'car_clave_programatica_id' => $form->clave_programatica_id ?: null,
+            'car_area_generadora_id' => $form->area_generadora_id ?: null,
+            'car_seccion_serie_id' => $form->seccion_serie_id ?: null,
             'car_estado' => CargaMasiva::ESTADO_PROCESANDO,
             'car_total' => count($files),
             'car_creado_por' => Yii::$app->user->isGuest ? null : Yii::$app->user->id,
@@ -72,6 +77,8 @@ class CargaMasivaService
         $detail->det_matricula_detectada = $matricula;
 
         if (!$result['exists']) {
+            $detail->det_ruta_temporal = $this->storePendingFile($batch, $file);
+            $detail->det_datos_extraidos = json_encode($alumnoData, JSON_UNESCAPED_UNICODE);
             $detail->det_estado = CargaMasivaDetalle::ESTADO_PENDIENTE;
             $detail->det_mensaje = 'Alumno no registrado. Revisar y capturar antes de guardar el archivo.';
             $detail->save(false);
@@ -112,6 +119,48 @@ class CargaMasivaService
         return CargaMasivaDetalle::ESTADO_GUARDADO;
     }
 
+    public function resolvePending(CargaMasivaDetalle $detail, Alumno $alumno)
+    {
+        if ($detail->det_estado !== CargaMasivaDetalle::ESTADO_PENDIENTE) {
+            return ['success' => false, 'message' => 'Este registro ya no está pendiente.'];
+        }
+
+        if (!$detail->carga) {
+            return ['success' => false, 'message' => 'No se encontró el lote de carga masiva.'];
+        }
+
+        $sourcePath = Yii::getAlias('@webroot/') . ltrim($detail->det_ruta_temporal, '/\\');
+        if (!$detail->det_ruta_temporal || !is_file($sourcePath)) {
+            return ['success' => false, 'message' => 'No se encontró el PDF temporal para completar el registro.'];
+        }
+
+        $archivo = new Archivo();
+        $archivo->arc_caja_id = $detail->carga->car_caja_id;
+        $archivo->arc_alumno_id = $alumno->alu_id;
+        $archivo->arc_fondo_id = $detail->carga->car_fondo_id;
+        $archivo->arc_clave_programatica_id = $detail->carga->car_clave_programatica_id;
+        $archivo->arc_area_generadora_id = $detail->carga->car_area_generadora_id;
+        $archivo->arc_seccion_serie_id = $detail->carga->car_seccion_serie_id;
+        $archivo->arc_codigo = $this->buildCodigoFromBatch($detail->carga, $alumno);
+        $archivo->arc_nombre_documento = pathinfo($detail->det_nombre_original, PATHINFO_FILENAME) ?: $archivo->arc_codigo;
+
+        $storage = new ArchivoStorageService();
+        $stored = $storage->saveArchivoFromPath($archivo, $sourcePath);
+        if (!$stored['success']) {
+            return $stored;
+        }
+
+        $detail->det_archivo_id = $stored['id'];
+        $detail->det_alumno_id = $alumno->alu_id;
+        $detail->det_estado = CargaMasivaDetalle::ESTADO_GUARDADO;
+        $detail->det_mensaje = 'Alumno creado y archivo guardado correctamente.';
+        $detail->save(false);
+
+        $this->refreshBatchCounters($detail->carga);
+
+        return ['success' => true, 'message' => 'Pendiente resuelto correctamente.'];
+    }
+
     private function buildArchivo(CargaMasivaForm $form, UploadedFile $file, Alumno $alumno)
     {
         $archivo = new Archivo();
@@ -142,6 +191,20 @@ class CargaMasivaService
         return implode('/', $parts);
     }
 
+    private function buildCodigoFromBatch(CargaMasiva $batch, Alumno $alumno)
+    {
+        $parts = [
+            $this->catalogCode(Fondo::class, $batch->car_fondo_id, 'fon_codigo'),
+            $this->catalogCode(ClaveProgramatica::class, $batch->car_clave_programatica_id, 'cla_codigo'),
+            $this->catalogCode(AreaGeneradora::class, $batch->car_area_generadora_id, 'are_codigo'),
+            $this->catalogCode(SeccionSerie::class, $batch->car_seccion_serie_id, 'sec_codigo'),
+            $alumno->alu_matricula,
+            date('Y'),
+        ];
+
+        return implode('/', $parts);
+    }
+
     private function catalogCode($class, $id, $attribute)
     {
         if (!$id) {
@@ -150,5 +213,33 @@ class CargaMasivaService
 
         $model = $class::findOne($id);
         return $model ? ArrayHelper::getValue($model, $attribute, '00') : '00';
+    }
+
+    private function storePendingFile(CargaMasiva $batch, UploadedFile $file)
+    {
+        $baseDir = Yii::getAlias('@webroot/archivos/carga-masiva-pendiente/') . $batch->car_id;
+        FileHelper::createDirectory($baseDir, 0775, true);
+
+        $safeName = preg_replace('/[^A-Za-z0-9._-]+/', '_', $file->baseName) . '-' . uniqid() . '.pdf';
+        $absolutePath = $baseDir . '/' . $safeName;
+        $file->saveAs($absolutePath);
+
+        return 'archivos/carga-masiva-pendiente/' . $batch->car_id . '/' . $safeName;
+    }
+
+    private function refreshBatchCounters(CargaMasiva $batch)
+    {
+        $counts = CargaMasivaDetalle::find()
+            ->select(['det_estado', 'total' => 'COUNT(*)'])
+            ->where(['det_carga_id' => $batch->car_id])
+            ->groupBy('det_estado')
+            ->asArray()
+            ->all();
+
+        $summary = ArrayHelper::map($counts, 'det_estado', 'total');
+        $batch->car_exitosos = (int)($summary[CargaMasivaDetalle::ESTADO_GUARDADO] ?? 0);
+        $batch->car_pendientes = (int)($summary[CargaMasivaDetalle::ESTADO_PENDIENTE] ?? 0);
+        $batch->car_errores = (int)($summary[CargaMasivaDetalle::ESTADO_ERROR] ?? 0);
+        $batch->save(false);
     }
 }

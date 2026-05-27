@@ -90,6 +90,30 @@ class ArchivoStorageService
         return $this->storeValidatedArchivo($model, $fileInstance, $absolutePath);
     }
 
+    public function saveArchivoFromPath(Archivo $model, $sourcePath)
+    {
+        if (!is_file($sourcePath)) {
+            return ['success' => false, 'message' => 'El archivo temporal no existe.'];
+        }
+
+        $alumno = Alumno::findOne($model->arc_alumno_id);
+        if (!$alumno) {
+            return ['success' => false, 'message' => 'El alumno seleccionado no existe.'];
+        }
+
+        $safeFilename = str_replace('/', '-', $model->arc_codigo);
+        $baseDir = Yii::getAlias('@webroot/archivos/') . $alumno->alu_matricula;
+
+        if (!is_dir($baseDir) && !FileHelper::createDirectory($baseDir, 0775, true)) {
+            return ['success' => false, 'message' => 'No se pudo crear el directorio: ' . $baseDir];
+        }
+
+        [$absolutePath, $relativePath] = $this->buildAvailablePath($baseDir, 'archivos/' . $alumno->alu_matricula, $safeFilename);
+        $model->arc_ruta = $relativePath;
+
+        return $this->storeValidatedArchivoFromPath($model, $sourcePath, $absolutePath);
+    }
+
     private function storeValidatedArchivo(Archivo $model, UploadedFile $fileInstance, $absolutePath)
     {
         if (!$fileInstance->saveAs($absolutePath)) {
@@ -100,6 +124,32 @@ class ArchivoStorageService
             return [
                 'success' => true,
                 'message' => '¡Archivo registrado y guardado exitosamente!',
+                'id' => $model->arc_id
+            ];
+        }
+
+        @unlink($absolutePath);
+        return [
+            'success' => false,
+            'message' => 'Error al guardar el registro en la base de datos.',
+            'errors' => $model->getErrors()
+        ];
+    }
+
+    private function storeValidatedArchivoFromPath(Archivo $model, $sourcePath, $absolutePath)
+    {
+        if (!@rename($sourcePath, $absolutePath) && !@copy($sourcePath, $absolutePath)) {
+            return ['success' => false, 'message' => 'No se pudo mover el archivo temporal al directorio final.'];
+        }
+
+        if (is_file($sourcePath)) {
+            @unlink($sourcePath);
+        }
+
+        if ($model->save(false)) {
+            return [
+                'success' => true,
+                'message' => 'Archivo registrado y guardado exitosamente.',
                 'id' => $model->arc_id
             ];
         }

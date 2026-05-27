@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use app\models\AreaGeneradora;
+use app\models\Alumno;
 use app\models\Caja;
 use app\models\CargaMasiva;
+use app\models\CargaMasivaDetalle;
 use app\models\CargaMasivaForm;
 use app\models\ClaveProgramatica;
 use app\models\Fondo;
@@ -79,6 +81,40 @@ class CargaMasivaController extends Controller
         ]);
     }
 
+    public function actionRevisar($id)
+    {
+        $detail = $this->findDetail($id);
+        if ($detail->det_estado !== CargaMasivaDetalle::ESTADO_PENDIENTE) {
+            Yii::$app->session->setFlash('info', 'Este registro ya no está pendiente.');
+            return $this->redirect(['view', 'id' => $detail->det_carga_id]);
+        }
+
+        $model = new Alumno();
+        $model->load($this->pendingAlumnoData($detail), '');
+
+        if ($model->load(Yii::$app->request->post())) {
+            $existing = Alumno::findOne(['alu_matricula' => $model->alu_matricula]);
+            if ($existing) {
+                $result = (new CargaMasivaService())->resolvePending($detail, $existing);
+            } elseif ($model->save()) {
+                $result = (new CargaMasivaService())->resolvePending($detail, $model);
+            } else {
+                return $this->render('revisar', [
+                    'model' => $model,
+                    'detail' => $detail,
+                ]);
+            }
+
+            Yii::$app->session->setFlash($result['success'] ? 'success' : 'error', $result['message']);
+            return $this->redirect(['view', 'id' => $detail->det_carga_id]);
+        }
+
+        return $this->render('revisar', [
+            'model' => $model,
+            'detail' => $detail,
+        ]);
+    }
+
     protected function findModel($id)
     {
         if (($model = CargaMasiva::findOne(['car_id' => $id])) !== null) {
@@ -86,6 +122,21 @@ class CargaMasivaController extends Controller
         }
 
         throw new NotFoundHttpException('La carga masiva solicitada no existe.');
+    }
+
+    protected function findDetail($id)
+    {
+        if (($model = CargaMasivaDetalle::findOne(['det_id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('El detalle solicitado no existe.');
+    }
+
+    private function pendingAlumnoData(CargaMasivaDetalle $detail)
+    {
+        $data = json_decode($detail->det_datos_extraidos ?: '[]', true);
+        return is_array($data) ? $data : [];
     }
 
     private function catalogs()
