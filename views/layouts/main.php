@@ -52,7 +52,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     
     $menuItems = [ ['label' => 'Home', 'url' => ['/site/index']] ];
     if (!Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Crear', 'items' => [['label' => 'Archivo', 'url' => ['/archivo/create']],['label' => 'Caja', 'url' => ['/caja/create']],]];
+        $menuItems[] = ['label' => 'Crear', 'items' => [['label' => 'Archivo', 'url' => ['/archivo/create']],['label' => 'Carga Masiva', 'url' => ['/carga-masiva/create']],['label' => 'Caja', 'url' => ['/caja/create']],]];
         $menuItems[] = ['label' => 'Buscar', 'items' => [['label' => 'Alumno', 'url' => ['/alumno/index']],['label' => 'Caja', 'url' => ['/caja/index']],['label' => 'Anaquel', 'url' => ['/anaquel/index']],]];
         $menuItems[] = ['label' => 'Escanear', 'url' => ['/site/scan']];
         $menuItems[] = ['label' => 'Cerrar sesión (' . Html::encode(Yii::$app->user->identity->username) . ')','url' => ['/user-management/auth/logout'],'linkOptions' => ['data-method' => 'post', 'class' => 'nav-link'],];

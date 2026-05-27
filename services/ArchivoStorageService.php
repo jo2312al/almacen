@@ -62,35 +62,69 @@ class ArchivoStorageService
         }
 
         // Definir rutas
-        $absolutePath = $baseDir . '/' . $safeFilename . '.pdf';
-        $relativePath = 'archivos/' . $alumno->alu_matricula . '/' . $safeFilename . '.pdf';
+        [$absolutePath, $relativePath] = $this->buildAvailablePath($baseDir, 'archivos/' . $alumno->alu_matricula, $safeFilename);
 
         // 5. Asignar ruta relativa para guardar en BD
         $model->arc_ruta = $relativePath;
 
-        // 6. Guardar Archivo Físico
-        if ($fileInstance->saveAs($absolutePath)) {
-            
-            // 7. Guardar en Base de Datos
-            // Usamos false porque ya validamos en el paso 2
-            if ($model->save(false)) { 
-                return [
-                    'success' => true,
-                    'message' => '¡Archivo registrado y guardado exitosamente!',
-                    'id' => $model->arc_id
-                ];
-            } else {
-                // Si falla la BD, borramos el archivo físico para no dejar basura
-                @unlink($absolutePath);
-                return [
-                    'success' => false, 
-                    'message' => 'Error al guardar el registro en la base de datos.', 
-                    'errors' => $model->getErrors()
-                ];
-            }
-        } else {
+        return $this->storeValidatedArchivo($model, $fileInstance, $absolutePath);
+    }
+
+    public function saveValidatedArchivo(Archivo $model, UploadedFile $fileInstance)
+    {
+        $alumno = Alumno::findOne($model->arc_alumno_id);
+        if (!$alumno) {
+            return ['success' => false, 'message' => 'El alumno seleccionado no existe.'];
+        }
+
+        $safeFilename = str_replace('/', '-', $model->arc_codigo);
+        $baseDir = Yii::getAlias('@webroot/archivos/') . $alumno->alu_matricula;
+
+        if (!is_dir($baseDir) && !FileHelper::createDirectory($baseDir, 0775, true)) {
+            return ['success' => false, 'message' => 'No se pudo crear el directorio: ' . $baseDir];
+        }
+
+        [$absolutePath, $relativePath] = $this->buildAvailablePath($baseDir, 'archivos/' . $alumno->alu_matricula, $safeFilename);
+        $model->arc_ruta = $relativePath;
+
+        return $this->storeValidatedArchivo($model, $fileInstance, $absolutePath);
+    }
+
+    private function storeValidatedArchivo(Archivo $model, UploadedFile $fileInstance, $absolutePath)
+    {
+        if (!$fileInstance->saveAs($absolutePath)) {
             return ['success' => false, 'message' => 'Error crítico: No se pudo mover el archivo al directorio final. Verifique permisos de escritura.'];
         }
+
+        if ($model->save(false)) {
+            return [
+                'success' => true,
+                'message' => '¡Archivo registrado y guardado exitosamente!',
+                'id' => $model->arc_id
+            ];
+        }
+
+        @unlink($absolutePath);
+        return [
+            'success' => false,
+            'message' => 'Error al guardar el registro en la base de datos.',
+            'errors' => $model->getErrors()
+        ];
+    }
+
+    private function buildAvailablePath($baseDir, $relativeDir, $safeFilename)
+    {
+        $counter = 1;
+        $candidate = $safeFilename;
+
+        do {
+            $absolutePath = $baseDir . '/' . $candidate . '.pdf';
+            $relativePath = $relativeDir . '/' . $candidate . '.pdf';
+            $counter++;
+            $candidate = $safeFilename . '-' . $counter;
+        } while (file_exists($absolutePath));
+
+        return [$absolutePath, $relativePath];
     }
 
     /**
