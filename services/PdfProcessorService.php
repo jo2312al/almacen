@@ -11,11 +11,17 @@ use GuzzleHttp\Exception\ConnectException;
 
 class PdfProcessorService
 {
-    private $apiUrl = 'http://127.0.0.1:5000/extract';
-
     public function processPdf($pdfFile)
     {
         try {
+            if (!$pdfFile) {
+                return ['status' => 'error', 'message' => 'No se recibió ningún archivo PDF.'];
+            }
+
+            if ($pdfFile->error !== UPLOAD_ERR_OK || !$pdfFile->tempName) {
+                return ['status' => 'error', 'message' => $this->uploadErrorMessage($pdfFile->error)];
+            }
+
             // 1. Llamar a la API
             $data = $this->callPythonApi($pdfFile);
 
@@ -49,7 +55,7 @@ class PdfProcessorService
     private function callPythonApi($pdfFile)
     {
         $client = new Client(['timeout' => 120.0]);
-        $response = $client->request('POST', $this->apiUrl, [
+        $response = $client->request('POST', Yii::$app->params['pdfApiUrl'], [
             'multipart' => [[
                 'name'     => 'file',
                 'contents' => fopen($pdfFile->tempName, 'r'),
@@ -131,5 +137,14 @@ class PdfProcessorService
     private function cleanText($text)
     {
         return trim(str_replace(',', '', $text ?? ''));
+    }
+
+    private function uploadErrorMessage($errorCode)
+    {
+        if ($errorCode === UPLOAD_ERR_INI_SIZE || $errorCode === UPLOAD_ERR_FORM_SIZE) {
+            return 'El PDF supera el tamaño máximo permitido por el servidor.';
+        }
+
+        return 'No se pudo recibir el PDF en el servidor.';
     }
 }
