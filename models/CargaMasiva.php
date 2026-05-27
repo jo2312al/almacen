@@ -19,7 +19,7 @@ class CargaMasiva extends \yii\db\ActiveRecord
     {
         return [
             [['car_caja_id', 'car_creado_en'], 'required'],
-            [['car_caja_id', 'car_total', 'car_exitosos', 'car_pendientes', 'car_errores', 'car_creado_por'], 'integer'],
+            [['car_caja_id', 'car_fondo_id', 'car_clave_programatica_id', 'car_area_generadora_id', 'car_seccion_serie_id', 'car_total', 'car_exitosos', 'car_pendientes', 'car_errores', 'car_creado_por'], 'integer'],
             [['car_creado_en', 'car_finalizado_en'], 'safe'],
             [['car_estado'], 'string', 'max' => 20],
             [['car_estado'], 'default', 'value' => self::ESTADO_PENDIENTE],
@@ -33,6 +33,10 @@ class CargaMasiva extends \yii\db\ActiveRecord
         return [
             'car_id' => 'ID',
             'car_caja_id' => 'Caja',
+            'car_fondo_id' => 'Fondo',
+            'car_clave_programatica_id' => 'Clave Programática',
+            'car_area_generadora_id' => 'Área Generadora',
+            'car_seccion_serie_id' => 'Sección Serie',
             'car_estado' => 'Estado',
             'car_total' => 'Total',
             'car_exitosos' => 'Guardados',

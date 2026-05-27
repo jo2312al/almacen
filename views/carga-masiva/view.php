@@ -68,6 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ? Html::a('Ver archivo', ['/archivo/view', 'arc_id' => $detail->archivo->arc_id])
                     : '',
             ],
+            [
+                'label' => 'Acción',
+                'format' => 'raw',
+                'value' => fn($detail) => $detail->det_estado === CargaMasivaDetalle::ESTADO_PENDIENTE
+                    ? Html::a('<i class="bi bi-person-plus me-1"></i>Revisar alumno', ['revisar', 'id' => $detail->det_id], ['class' => 'btn btn-sm btn-warning'])
+                    : '',
+            ],
             'det_mensaje:ntext',
         ],
     ]); ?>

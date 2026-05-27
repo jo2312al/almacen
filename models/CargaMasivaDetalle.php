@@ -18,9 +18,9 @@ class CargaMasivaDetalle extends \yii\db\ActiveRecord
         return [
             [['det_carga_id', 'det_nombre_original', 'det_estado', 'det_creado_en'], 'required'],
             [['det_carga_id', 'det_archivo_id', 'det_alumno_id'], 'integer'],
-            [['det_mensaje'], 'string'],
+            [['det_mensaje', 'det_datos_extraidos'], 'string'],
             [['det_creado_en'], 'safe'],
-            [['det_nombre_original'], 'string', 'max' => 255],
+            [['det_nombre_original', 'det_ruta_temporal'], 'string', 'max' => 255],
             [['det_matricula_detectada', 'det_estado'], 'string', 'max' => 20],
             [['det_carga_id'], 'exist', 'skipOnError' => true, 'targetClass' => CargaMasiva::class, 'targetAttribute' => ['det_carga_id' => 'car_id']],
             [['det_archivo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Archivo::class, 'targetAttribute' => ['det_archivo_id' => 'arc_id']],
@@ -33,7 +33,9 @@ class CargaMasivaDetalle extends \yii\db\ActiveRecord
         return [
             'det_id' => 'ID',
             'det_nombre_original' => 'Archivo',
+            'det_ruta_temporal' => 'Ruta temporal',
             'det_matricula_detectada' => 'Matrícula',
+            'det_datos_extraidos' => 'Datos extraídos',
             'det_estado' => 'Estado',
             'det_mensaje' => 'Mensaje',
             'det_creado_en' => 'Procesado',
