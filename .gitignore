@@ -15,6 +15,9 @@ Thumbs.db
 # composer vendor dir
 /vendor
 
+# npm dependencies
+/node_modules/
+
 # composer itself is not needed
 composer.phar
 
@@ -31,4 +34,28 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+# Yii runtime and generated public assets
+/runtime/*
+!/runtime/.gitignore
+/web/assets/*
+!/web/assets/.gitignore
+
+# Uploaded/generated application files
 /web/archivos/
+/web/qrcodes/
+/qrcodes/
+
+# Local environment overrides and secrets
+.env
+.env.*
+!/env.example
+/config/*.local.php
+
+# Local diagnostics
+/phpinfo.php
+/web/phpinfo.php
+
+# Database dumps/backups
+/database/*.sql
+/database/backups/

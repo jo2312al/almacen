@@ -42,23 +42,21 @@ Sistema web desarrollado con Yii2 para administrar archivos documentales de alum
    npm install
    ```
 
-4. Crea o restaura la base de datos con el script incluido:
+4. Crea o restaura la base de datos con un dump local:
 
    ```bash
-   mysql -u root -p < database/servicio_schema.sql
+   mysql -u root -p < database/servicio2_recuperado_2025-04-28.sql
    ```
 
-   En una instalacion tipica de XAMPP tambien puedes importarlo desde phpMyAdmin.
+   Los dumps SQL no se versionan en Git. Si necesitas uno, colocalo localmente en `database/` o importalo desde phpMyAdmin.
 
-5. Revisa la conexion en `config/db.php`:
+5. Revisa la conexion en `config/db.php` o crea un archivo local `config/db.local.php`:
 
    ```php
    return [
-       'class' => 'yii\db\Connection',
        'dsn' => 'mysql:host=localhost;port=3306;dbname=servicio',
        'username' => 'root',
-       'password' => '2312',
-       'charset' => 'utf8',
+       'password' => '',
    ];
    ```
 
@@ -70,13 +68,13 @@ Sistema web desarrollado con Yii2 para administrar archivos documentales de alum
 
 ## Base de datos
 
-El archivo de reconstruccion esta en:
+Los dumps de base de datos deben mantenerse fuera de Git. Para desarrollo local puedes guardar tus respaldos en:
 
 ```text
-database/servicio_schema.sql
+database/
 ```
 
-Ese script crea la base `servicio`, las tablas principales de la aplicacion y las tablas necesarias para el modulo de usuarios.
+La carpeta esta ignorada para archivos `.sql`, de modo que puedes tener respaldos locales sin subir datos sensibles al repositorio.
 
 Tablas principales:
 
@@ -162,7 +160,8 @@ widgets/       Widgets personalizados
 - `services/CajaService.php`: genera codigos de caja y QR.
 - `services/AnaquelService.php`: genera nombres consecutivos de anaqueles.
 - `services/PdfProcessorService.php`: conecta con la API Python de extraccion.
-- `database/servicio_schema.sql`: reconstruccion de la base de datos.
+- `config/db.local.example.php`: ejemplo de configuracion local de base de datos.
+- `config/web.local.example.php`: ejemplo de configuracion local de cookie y correo.
 
 ## Notas de seguridad
 

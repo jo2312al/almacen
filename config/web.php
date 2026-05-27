@@ -42,7 +42,7 @@ $config = [
             // a nivel de módulo para el admin y a nivel de aplicación para el resto.
         ],
         'request' => [
-            'cookieValidationKey' => 'zGKvViRlv_fHAO2uZFmMgliGG-mbky_F',
+            'cookieValidationKey' => getenv('COOKIE_VALIDATION_KEY') ?: 'change-me-in-local-config',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
@@ -82,12 +82,12 @@ $config = [
             'viewPath' => '@app/mail',
             'useFileTransport' => false,
             'transport' => [
-                'scheme' => 'smtp',
-                'host' => 'smtp.gmail.com',
-                'username' => 'jomejia00001@gmail.com',
-                'password' => 'yamk sehh zwcg bnvz',
-                'port' => '587',
-                'encryption' => 'tls',
+                'scheme' => getenv('SMTP_SCHEME') ?: 'smtp',
+                'host' => getenv('SMTP_HOST') ?: 'smtp.gmail.com',
+                'username' => getenv('SMTP_USERNAME') ?: '',
+                'password' => getenv('SMTP_PASSWORD') ?: '',
+                'port' => getenv('SMTP_PORT') ?: '587',
+                'encryption' => getenv('SMTP_ENCRYPTION') ?: 'tls',
             ],
         ],
         'log' => [
@@ -124,6 +124,11 @@ $config = [
     },
     'params' => $params,
 ];
+
+$localConfig = __DIR__ . '/web.local.php';
+if (is_file($localConfig)) {
+    $config = \yii\helpers\ArrayHelper::merge($config, require $localConfig);
+}
 
 if (YII_ENV_DEV) {
     // Configuración para el entorno de desarrollo
