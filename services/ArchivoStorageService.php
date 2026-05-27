@@ -122,12 +122,22 @@ class ArchivoStorageService
         $model = Archivo::findOne($id);
         if (!$model) return null;
 
-        $filePath = Yii::getAlias('@webroot/') . $model->arc_ruta;
+        $relativePath = $model->arc_ruta ?: null;
+
+        if (!$relativePath && $model->hasAttribute('arc_contenido')) {
+            $relativePath = $model->arc_contenido;
+        }
+
+        if (!$relativePath) {
+            return null;
+        }
+
+        $filePath = Yii::getAlias('@webroot/') . ltrim($relativePath, '/\\');
         
-        if (file_exists($filePath)) {
+        if (is_file($filePath)) {
             return [
                 'path' => $filePath,
-                'filename' => $model->arc_codigo . '.pdf'
+                'filename' => basename($filePath)
             ];
         }
         return null;
