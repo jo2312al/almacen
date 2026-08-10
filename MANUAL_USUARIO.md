@@ -88,7 +88,13 @@ Ruta: `Buscar > Caja > Ver > Vista QR`
 
 Cada caja puede generar un QR que abre una vista consultable con su ubicación física y los documentos registrados. Esta vista ayuda a demostrar que la caja física y su contenido digital están conectados.
 
-## 9. Bitácora
+## 9. Reporte de cajas
+
+Ruta: `Reportes > Reporte de Cajas`
+
+Muestra cada caja con su anaquel, nivel y cantidad de documentos registrados. Desde esta vista se puede abrir la caja, consultar su vista QR o exportar el reporte en CSV para revisarlo en Excel.
+
+## 10. Bitácora
 
 Ruta: `Buscar > Bitácora`
 
@@ -101,7 +107,7 @@ La bitácora muestra acciones relevantes:
 - resolución de pendientes.
 
 Sirve como evidencia de trazabilidad y control institucional.
-## 10. Recomendaciones operativas
+## 11. Recomendaciones operativas
 - Registrar primero los catálogos base: carreras, servicios, fondos, áreas, claves y secciones.
 - Crear cajas antes de subir documentos.
 - Revisar pendientes después de cada carga masiva.

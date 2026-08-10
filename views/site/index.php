@@ -110,5 +110,6 @@ $cards = [
         <div class="col-md-3"><?= Html::a('<i class="bi bi-search me-2"></i>Búsqueda Global', ['/busqueda/index'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
         <div class="col-md-3"><?= Html::a('<i class="bi bi-qr-code-scan me-2"></i>Escanear', ['/site/scan'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
         <div class="col-md-3"><?= Html::a('<i class="bi bi-journal-text me-2"></i>Bitácora', ['/bitacora/index'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
+        <div class="col-md-3"><?= Html::a('<i class="bi bi-table me-2"></i>Reporte de Cajas', ['/reporte/cajas'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
     </div>
 </div>

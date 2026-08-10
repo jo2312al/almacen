@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
 
 class BusquedaController extends Controller
 {
+    /**
+     * Aplica control de acceso a las herramientas de busqueda.
+     */
     public function behaviors()
     {
         return [
@@ -19,38 +22,44 @@ class BusquedaController extends Controller
         ];
     }
 
+    /**
+     * Lista expedientes que coinciden con matricula, alumno, caja, documento o clasificador.
+     */
     public function actionIndex($q = '')
     {
-        $query = Archivo::find()
+        $consultaArchivos = Archivo::find()
             ->alias('archivo')
             ->joinWith(['arcAlumno alumno', 'arcCaja caja'])
             ->orderBy(['archivo.arc_id' => SORT_DESC]);
 
-        $q = trim($q);
-        if ($q !== '') {
-            $query->andWhere([
+        $textoBusqueda = trim($q);
+        if ($textoBusqueda !== '') {
+            $consultaArchivos->andWhere([
                 'or',
-                ['like', 'archivo.arc_codigo', $q],
-                ['like', 'archivo.arc_nombre_documento', $q],
-                ['like', 'alumno.alu_matricula', $q],
-                ['like', 'alumno.alu_nombre', $q],
-                ['like', 'alumno.alu_paterno', $q],
-                ['like', 'alumno.alu_materno', $q],
-                ['like', 'caja.caj_codigo', $q],
+                ['like', 'archivo.arc_codigo', $textoBusqueda],
+                ['like', 'archivo.arc_nombre_documento', $textoBusqueda],
+                ['like', 'alumno.alu_matricula', $textoBusqueda],
+                ['like', 'alumno.alu_nombre', $textoBusqueda],
+                ['like', 'alumno.alu_paterno', $textoBusqueda],
+                ['like', 'alumno.alu_materno', $textoBusqueda],
+                ['like', 'caja.caj_codigo', $textoBusqueda],
             ]);
         }
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+        $proveedorDatos = new ActiveDataProvider([
+            'query' => $consultaArchivos,
             'pagination' => ['pageSize' => 20],
         ]);
 
         return $this->render('index', [
-            'q' => $q,
-            'dataProvider' => $dataProvider,
+            'q' => $textoBusqueda,
+            'dataProvider' => $proveedorDatos,
         ]);
     }
 
+    /**
+     * Presenta la ubicacion fisica animada de un expediente dentro del archivo.
+     */
     public function actionLocalizar($arc_id)
     {
         $archivo = Archivo::find()
@@ -63,9 +72,9 @@ class BusquedaController extends Controller
         }
 
         $caja = $archivo->arcCaja;
-        $cajasAnaquel = [];
+        $cajasDelAnaquel = [];
         if ($caja !== null && $caja->caj_anaquel_id !== null) {
-            $cajasAnaquel = Caja::find()
+            $cajasDelAnaquel = Caja::find()
                 ->with(['cajAnaquel', 'cajNivel', 'archivos'])
                 ->where(['caj_anaquel_id' => $caja->caj_anaquel_id])
                 ->orderBy(['caj_nivel_id' => SORT_ASC, 'caj_codigo' => SORT_ASC])
@@ -75,7 +84,7 @@ class BusquedaController extends Controller
         return $this->render('localizar', [
             'archivo' => $archivo,
             'caja' => $caja,
-            'cajasAnaquel' => $cajasAnaquel,
+            'cajasAnaquel' => $cajasDelAnaquel,
         ]);
     }
 }
