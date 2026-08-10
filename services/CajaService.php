@@ -22,7 +22,7 @@ class CajaService
     public function createCaja($postData)
     {
         $model = new Caja();
-        
+
         // Cargar datos
         if (!$model->load($postData)) {
             return ['success' => false, 'message' => 'No se recibieron datos válidos.', 'model' => $model];
@@ -39,7 +39,7 @@ class CajaService
 
         // Generar Código Automático
         $codigo = $this->calculateNextCode($anaquelId, $nivelId);
-        
+
         if (!$codigo) {
             return ['success' => false, 'message' => 'Error al generar el código: Anaquel o Nivel no encontrados.', 'model' => $model];
         }
@@ -49,14 +49,14 @@ class CajaService
         // Guardar
         if ($model->save()) {
             return [
-                'success' => true, 
-                'message' => "Caja creada con código: $codigo", 
+                'success' => true,
+                'message' => "Caja creada con código: $codigo",
                 'model' => $model
             ];
         } else {
             return [
-                'success' => false, 
-                'message' => 'Error al guardar en base de datos.', 
+                'success' => false,
+                'message' => 'Error al guardar en base de datos.',
                 'model' => $model,
                 'errors' => $model->getErrors()
             ];
@@ -75,8 +75,8 @@ class CajaService
             // Asumimos que tienes configurado el componente 'qr' en web.php
             $qr = Yii::$app->get('qr');
 
-            // Construye la URL absoluta hacia la vista de la caja
-            $qrText = Url::to(['caja/view', 'caj_id' => $caj_id], true);
+            // Construye la URL absoluta hacia la consulta de la caja
+            $qrText = Url::to(['caja/consulta', 'caj_id' => $caj_id], true);
             $fileName = 'qr_caja_' . $caj_id . '.png';
 
             // Genera la imagen del QR en memoria
@@ -122,8 +122,8 @@ class CajaService
 
         // 4. Construir código final
         // Formato: AC + ID_Anaquel(2 digitos) + LetraNivel + Contador(4 digitos)
-        return "AC" . str_pad($anaquel->ana_id, 2, '0', STR_PAD_LEFT) . 
-               $primerLetraNivel . 
+        return "AC" . str_pad($anaquel->ana_id, 2, '0', STR_PAD_LEFT) .
+               $primerLetraNivel .
                $contador;
     }
 }

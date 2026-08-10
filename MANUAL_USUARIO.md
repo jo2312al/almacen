@@ -70,13 +70,19 @@ Al guardar, el sistema:
 - cambia el detalle de pendiente a guardado,
 - actualiza los contadores del lote.
 
-## 6. Búsqueda y consulta
+## 6. Búsqueda global
 
-Ruta: `Buscar`
+Ruta: `Buscar > Búsqueda Global`
 
-Desde el menú se pueden consultar alumnos, cajas y anaqueles. Las vistas permiten revisar registros, abrir documentos asociados y consultar información de clasificación.
+Permite localizar expedientes por matrícula, nombre del alumno, caja, nombre de documento o código clasificador. Desde los resultados se puede abrir la ficha del archivo o descargar el PDF.
 
-## 7. Bitácora
+## 7. Consulta por QR de caja
+
+Ruta: `Buscar > Caja > Ver > Vista QR`
+
+Cada caja puede generar un QR que abre una vista consultable con su ubicación física y los documentos registrados. Esta vista ayuda a demostrar que la caja física y su contenido digital están conectados.
+
+## 8. Bitácora
 
 Ruta: `Buscar > Bitácora`
 
@@ -90,7 +96,7 @@ La bitácora muestra acciones relevantes:
 
 Sirve como evidencia de trazabilidad y control institucional.
 
-## 8. Recomendaciones operativas
+## 9. Recomendaciones operativas
 
 - Registrar primero los catálogos base: carreras, servicios, fondos, áreas, claves y secciones.
 - Crear cajas antes de subir documentos.

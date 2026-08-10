@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::img($qrUrl, ['alt' => 'Código QR', 'class' => 'img-fluid mx-auto d-block', 'style' => 'max-width: 250px;']) ?>
                 <div class="mt-3">
                     <?= Html::a('<i class="bi bi-download"></i> Descargar QR', $qrUrl, ['class' => 'btn btn-secondary', 'download' => 'qr_caja_' . $model->caj_codigo . '.png']) ?>
+                    <?= Html::a('<i class="bi bi-box-arrow-up-right"></i> Vista QR', ['consulta', 'caj_id' => $model->caj_id], ['class' => 'btn btn-outline-primary mt-2']) ?>
                 </div>
             </div>
         </div>
@@ -61,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
         // OPTIMIZACIÓN: Pre-cargamos la relación 'arcAlumno' para evitar consultas N+1.
         $queryArchivos = $model->getArchivos()->with('arcAlumno');
-        
+
         // Creamos el DataProvider con la consulta optimizada.
         $dataProviderArchivos = new ActiveDataProvider(['query' => $queryArchivos]);
 
@@ -100,6 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ],
-        ]); 
+        ]);
     ?>
 </div>

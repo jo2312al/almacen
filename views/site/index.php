@@ -107,7 +107,7 @@ $cards = [
 
     <div class="row g-3">
         <div class="col-md-3"><?= Html::a('<i class="bi bi-plus-circle me-2"></i>Crear', ['/site/menucrear'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
-        <div class="col-md-3"><?= Html::a('<i class="bi bi-search me-2"></i>Buscar', ['/site/menubuscar'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
+        <div class="col-md-3"><?= Html::a('<i class="bi bi-search me-2"></i>Búsqueda Global', ['/busqueda/index'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
         <div class="col-md-3"><?= Html::a('<i class="bi bi-qr-code-scan me-2"></i>Escanear', ['/site/scan'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
         <div class="col-md-3"><?= Html::a('<i class="bi bi-journal-text me-2"></i>Bitácora', ['/bitacora/index'], ['class' => 'btn btn-outline-primary w-100 py-3']) ?></div>
     </div>

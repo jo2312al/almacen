@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use yii\data\ActiveDataProvider;
 
 /**
  * CajaController implements the CRUD actions for Caja model.
@@ -59,6 +60,24 @@ class CajaController extends Controller
     }
 
     /**
+     * Public consultation view intended for QR access.
+     */
+    public function actionConsulta($caj_id)
+    {
+        $model = $this->findModel($caj_id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $model->getArchivos()
+                ->with('arcAlumno')
+                ->orderBy(['arc_id' => SORT_DESC]),
+            'pagination' => ['pageSize' => 50],
+        ]);
+
+        return $this->render('consulta', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    /**
      * Creates a new Caja model using CajaService logic.
      */
     public function actionCreate()
@@ -68,7 +87,7 @@ class CajaController extends Controller
         if ($this->request->isPost) {
             // Instanciamos el servicio
             $service = new CajaService();
-            
+
             // Delegamos la creación
             $result = $service->createCaja($this->request->post());
 

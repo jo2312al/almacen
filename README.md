@@ -19,6 +19,8 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 - Bandeja de pendientes para alumnos inexistentes.
 - Revisión de alumno pendiente con formulario prellenado.
 - Bitácora de acciones relevantes del sistema.
+- Búsqueda global por matrícula, alumno, caja, documento o código clasificador.
+- Vista consultable por QR para revisar el contenido digital de una caja.
 - Descarga y consulta de archivos registrados.
 - Generación de códigos de caja y soporte para QR.
 - Usuarios y permisos mediante `webvimark/module-user-management`.
@@ -33,7 +35,9 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 6. Abrir un pendiente y usar `Revisar alumno`.
 7. Guardar el alumno prellenado.
 8. Ver cómo el pendiente cambia a guardado.
-9. Abrir la bitácora para mostrar evidencia de trazabilidad.
+9. Usar la búsqueda global para localizar un expediente en segundos.
+10. Escanear o abrir el QR de una caja para consultar su contenido digital.
+11. Abrir la bitácora para mostrar evidencia de trazabilidad.
 
 ## Módulos principales
 
@@ -135,4 +139,4 @@ Consulta [MANUAL_USUARIO.md](MANUAL_USUARIO.md) para el flujo de operación.
 
 ## Estado del proyecto
 
-El sistema ya cuenta con despliegue probado, carga individual, carga masiva, revisión de pendientes, dashboard y bitácora. Como trabajo futuro se recomienda fortalecer reportes, búsqueda global, backups automatizados y QR consultable por caja/documento.
+El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global y consulta de cajas por QR. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
