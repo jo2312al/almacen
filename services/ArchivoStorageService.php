@@ -9,12 +9,12 @@ use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 /**
- * Servicio encargado de la gestión física y lógica de los archivos.
+ * Servicio encargado de la gestiÃ³n fÃ­sica y lÃ³gica de los archivos.
  */
 class ArchivoStorageService
 {
     /**
-     * Guarda el archivo físico y el registro en base de datos.
+     * Guarda el archivo fÃ­sico y el registro en base de datos.
      * @param Archivo $model El modelo con los datos cargados.
      * @param UploadedFile $fileInstance La instancia del archivo subido.
      * @return array Resultado ['success', 'message', 'errors', 'id']
@@ -23,10 +23,10 @@ class ArchivoStorageService
     {
         // 1. Validar que la instancia del archivo existe
         if (!$fileInstance) {
-            return ['success' => false, 'message' => 'No se ha subido ningún archivo (El archivo es nulo).'];
+            return ['success' => false, 'message' => 'No se ha subido ningÃºn archivo (El archivo es nulo).'];
         }
 
-        // --- CORRECCIÓN CRÍTICA ---
+        // --- CORRECCIÃ“N CRÃTICA ---
         // Asignamos el archivo al modelo ANTES de validar.
         // Esto permite que las reglas del modelo (ej. [['file'], 'required']) pasen correctamente.
         $model->file = $fileInstance;
@@ -35,8 +35,8 @@ class ArchivoStorageService
         // 2. Validar datos del modelo (incluyendo el archivo)
         if (!$model->validate()) {
             return [
-                'success' => false, 
-                'message' => 'Error de validación en los datos.', 
+                'success' => false,
+                'message' => 'Error de validaciÃ³n en los datos.',
                 'errors' => $model->getErrors()
             ];
         }
@@ -50,10 +50,10 @@ class ArchivoStorageService
         // 4. Preparar Directorios y Nombres
         // Reemplazar barras '/' por guiones para que no rompa la ruta
         $safeFilename = str_replace('/', '-', $model->arc_codigo);
-        
+
         // Directorio base: web/archivos/MATRICULA
         $baseDir = Yii::getAlias('@webroot/archivos/') . $alumno->alu_matricula;
-        
+
         // Crear directorio recursivamente si no existe
         if (!is_dir($baseDir)) {
             if (!FileHelper::createDirectory($baseDir, 0775, true)) {
@@ -117,13 +117,14 @@ class ArchivoStorageService
     private function storeValidatedArchivo(Archivo $model, UploadedFile $fileInstance, $absolutePath)
     {
         if (!$fileInstance->saveAs($absolutePath)) {
-            return ['success' => false, 'message' => 'Error crítico: No se pudo mover el archivo al directorio final. Verifique permisos de escritura.'];
+            return ['success' => false, 'message' => 'Error crÃ­tico: No se pudo mover el archivo al directorio final. Verifique permisos de escritura.'];
         }
 
         if ($model->save(false)) {
+            BitacoraService::registrar('crear', 'archivo', $model->arc_id, 'Archivo guardado: ' . $model->arc_nombre_documento);
             return [
                 'success' => true,
-                'message' => '¡Archivo registrado y guardado exitosamente!',
+                'message' => 'Â¡Archivo registrado y guardado exitosamente!',
                 'id' => $model->arc_id
             ];
         }
@@ -147,6 +148,7 @@ class ArchivoStorageService
         }
 
         if ($model->save(false)) {
+            BitacoraService::registrar('crear', 'archivo', $model->arc_id, 'Archivo guardado desde pendiente: ' . $model->arc_nombre_documento);
             return [
                 'success' => true,
                 'message' => 'Archivo registrado y guardado exitosamente.',
@@ -178,7 +180,7 @@ class ArchivoStorageService
     }
 
     /**
-     * Elimina el archivo físico y el registro.
+     * Elimina el archivo fÃ­sico y el registro.
      */
     public function deleteArchivo($id)
     {
@@ -188,14 +190,19 @@ class ArchivoStorageService
         }
 
         $filePath = Yii::getAlias('@webroot/') . $model->arc_ruta;
-        
-        // Intentar borrar archivo físico
+
+        // Intentar borrar archivo fÃ­sico
         if ($model->arc_ruta && file_exists($filePath)) {
             @unlink($filePath);
         }
 
         // Borrar de BD
-        return $model->delete();
+        $deleted = $model->delete();
+        if ($deleted) {
+            BitacoraService::registrar('eliminar', 'archivo', $id, 'Archivo eliminado.');
+        }
+
+        return $deleted;
     }
 
     /**
@@ -217,7 +224,7 @@ class ArchivoStorageService
         }
 
         $filePath = Yii::getAlias('@webroot/') . ltrim($relativePath, '/\\');
-        
+
         if (is_file($filePath)) {
             return [
                 'path' => $filePath,

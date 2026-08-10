@@ -8,6 +8,7 @@ use app\models\AlumnoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\services\BitacoraService;
 
 /**
  * AlumnoController implements the CRUD actions for Alumno model.
@@ -78,6 +79,7 @@ class AlumnoController extends Controller
             if ($request->isPost) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 if ($model->load($request->post()) && $model->save()) {
+                    BitacoraService::registrar('crear', 'alumno', $model->alu_id, 'Alumno creado: ' . $model->alu_matricula);
                     $nombreCompleto = method_exists($model, 'getNombreCompleto') ? $model->getNombreCompleto() : $model->alu_nombre;
                     return ['success' => true, 'id' => $model->alu_id, 'nombreCompleto' => $nombreCompleto, 'matricula' => $model->alu_matricula];
                 } else {
@@ -96,6 +98,7 @@ class AlumnoController extends Controller
         // Lógica para acceso directo a la URL (no AJAX)
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                BitacoraService::registrar('crear', 'alumno', $model->alu_id, 'Alumno creado: ' . $model->alu_matricula);
                 return $this->redirect(['view', 'alu_id' => $model->alu_id]);
             }
         } else {

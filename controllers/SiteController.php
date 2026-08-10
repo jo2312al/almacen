@@ -3,18 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\Alumno;
+use app\models\Archivo;
+use app\models\BitacoraAccion;
+use app\models\Caja;
+use app\models\CargaMasiva;
+use app\models\CargaMasivaDetalle;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -24,9 +23,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -40,65 +36,51 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'metrics' => $this->dashboardMetrics(),
+            'recentLoads' => CargaMasiva::find()->with('caja')->orderBy(['car_id' => SORT_DESC])->limit(5)->all(),
+            'recentActions' => BitacoraAccion::find()->orderBy(['bit_id' => SORT_DESC])->limit(6)->all(),
+        ]);
     }
 
     public function actionIndexUsuario()
     {
-        return $this->render('index-usuario'); 
+        return $this->render('index-usuario');
     }
-    
-    // =========================================================================
-    // === INICIO DE LA CORRECCIÓN: Acciones añadidas ==========================
-    // =========================================================================
-    /**
-     * Displays the "Crear" menu page.
-     * @return string
-     */
+
     public function actionMenucrear()
     {
         return $this->render('menucrear');
     }
 
-    /**
-     * Displays the "Buscar" menu page.
-     * @return string
-     */
     public function actionMenubuscar()
     {
         return $this->render('menubuscar');
     }
-    // =========================================================================
-    // === FIN DE LA CORRECCIÓN ================================================
-    // =========================================================================
 
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
-    
-    /**
-     * Displays the scan page.
-     *
-     * @return string
-     */
+
     public function actionScan()
     {
-        return $this->render('scan'); 
+        return $this->render('scan');
+    }
+
+    private function dashboardMetrics()
+    {
+        return [
+            'alumnos' => Alumno::find()->count(),
+            'cajas' => Caja::find()->count(),
+            'archivos' => Archivo::find()->count(),
+            'cargas' => CargaMasiva::find()->count(),
+            'pendientes' => CargaMasivaDetalle::find()->where(['det_estado' => CargaMasivaDetalle::ESTADO_PENDIENTE])->count(),
+            'errores' => CargaMasivaDetalle::find()->where(['det_estado' => CargaMasivaDetalle::ESTADO_ERROR])->count(),
+        ];
     }
 }

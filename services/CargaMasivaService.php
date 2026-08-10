@@ -50,6 +50,7 @@ class CargaMasivaService
         $batch->car_errores = $summary[CargaMasivaDetalle::ESTADO_ERROR];
         $batch->car_finalizado_en = date('Y-m-d H:i:s');
         $batch->save(false);
+        BitacoraService::registrar('procesar', 'carga_masiva', $batch->car_id, 'Carga masiva procesada: ' . $batch->car_total . ' archivo(s).');
 
         return $batch;
     }
@@ -87,7 +88,7 @@ class CargaMasivaService
 
         $alumno = Alumno::findOne(['alu_id' => $alumnoData['alu_id']]);
         if (!$alumno) {
-            $detail->det_mensaje = 'La API encontró matrícula, pero el alumno ya no existe en la base.';
+            $detail->det_mensaje = 'La API encontrÃ³ matrÃ­cula, pero el alumno ya no existe en la base.';
             $detail->save(false);
             return CargaMasivaDetalle::ESTADO_ERROR;
         }
@@ -122,16 +123,16 @@ class CargaMasivaService
     public function resolvePending(CargaMasivaDetalle $detail, Alumno $alumno)
     {
         if ($detail->det_estado !== CargaMasivaDetalle::ESTADO_PENDIENTE) {
-            return ['success' => false, 'message' => 'Este registro ya no está pendiente.'];
+            return ['success' => false, 'message' => 'Este registro ya no estÃ¡ pendiente.'];
         }
 
         if (!$detail->carga) {
-            return ['success' => false, 'message' => 'No se encontró el lote de carga masiva.'];
+            return ['success' => false, 'message' => 'No se encontrÃ³ el lote de carga masiva.'];
         }
 
         $sourcePath = Yii::getAlias('@webroot/') . ltrim($detail->det_ruta_temporal, '/\\');
         if (!$detail->det_ruta_temporal || !is_file($sourcePath)) {
-            return ['success' => false, 'message' => 'No se encontró el PDF temporal para completar el registro.'];
+            return ['success' => false, 'message' => 'No se encontrÃ³ el PDF temporal para completar el registro.'];
         }
 
         $archivo = new Archivo();
@@ -156,6 +157,7 @@ class CargaMasivaService
         $detail->det_mensaje = 'Alumno creado y archivo guardado correctamente.';
         $detail->save(false);
 
+        BitacoraService::registrar('resolver', 'carga_masiva_detalle', $detail->det_id, 'Alumno pendiente resuelto y archivo guardado.');
         $this->refreshBatchCounters($detail->carga);
 
         return ['success' => true, 'message' => 'Pendiente resuelto correctamente.'];
