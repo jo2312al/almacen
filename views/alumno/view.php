@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a('Reporte documental', ['/reporte/alumno', 'id' => $model->alu_id], ['class' => 'btn btn-info']) ?>
         <?= Html::a('Actualizar', ['update', 'alu_id' => $model->alu_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Eliminar', ['delete', 'alu_id' => $model->alu_id], [
             'class' => 'btn btn-danger',
@@ -61,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <li>
                 <?= Html::a(
                     $archivo->arc_codigo ?? 'Archivo sin nombre', 
-                    ['archivo/view', 'id' => $archivo->arc_id], // Cambia 'arc_id' si el identificador del archivo tiene otro nombre
+                    ['/archivo/view', 'arc_id' => $archivo->arc_id], // Cambia 'arc_id' si el identificador del archivo tiene otro nombre
                     ['target' => '_blank']
                 ) ?>
             </li>

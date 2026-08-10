@@ -74,6 +74,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             'label' => 'Reportes',
             'items' => [
                 ['label' => 'Reporte de Cajas', 'url' => ['/reporte/cajas']],
+                ['label' => 'Reporte por Alumno', 'url' => ['/reporte/alumnos']],
             ],
         ];
         $menuItems[] = ['label' => 'Escanear', 'url' => ['/site/scan']];

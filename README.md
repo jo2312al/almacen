@@ -13,8 +13,8 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 - Dashboard con métricas generales del archivo documental.
 - Gestión de alumnos, carreras, generaciones, periodos y servicios.
 - Gestión física: anaqueles, niveles de almacenamiento y cajas.
-- Registro individual de documentos PDF.
-- Carga masiva por caja con procesamiento de varios PDFs.
+- Registro individual de documentos PDF con ficha profesional de consulta.
+- Carga masiva por caja con validación visual, contador de PDFs y estado de procesamiento.
 - Detección de alumnos existentes mediante API de extracción.
 - Bandeja de pendientes para alumnos inexistentes.
 - Revisión de alumno pendiente con formulario prellenado.
@@ -23,6 +23,7 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 - Localizador visual animado para ubicar físicamente un expediente en anaquel, nivel y caja.
 - Vista consultable por QR para revisar el contenido digital de una caja.
 - Reporte de cajas con ubicación física, conteo documental y exportación CSV.
+- Reporte por alumno con ficha documental, ubicación de expedientes y exportación CSV.
 - Descarga y consulta de archivos registrados.
 - Generación de códigos de caja y soporte para QR.
 - Usuarios y permisos mediante `webvimark/module-user-management`.
@@ -41,7 +42,8 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 10. Abrir Localizar para mostrar el mapa animado de anaquel, nivel y caja.
 11. Escanear o abrir el QR de una caja para consultar su contenido digital.
 12. Abrir el reporte de cajas y exportarlo en CSV.
-13. Abrir la bitácora para mostrar evidencia de trazabilidad.
+13. Abrir el reporte por alumno para revisar su ficha documental.
+14. Abrir la bitácora para mostrar evidencia de trazabilidad.
 
 ## Módulos principales
 
@@ -143,4 +145,4 @@ Consulta [MANUAL_USUARIO.md](MANUAL_USUARIO.md) para el flujo de operación.
 
 ## Estado del proyecto
 
-El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global, localizador visual, consulta de cajas por QR y reporte exportable de cajas. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
+El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global, localizador visual, consulta de cajas por QR y reportes exportables por caja y alumno. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
