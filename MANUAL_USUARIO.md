@@ -111,6 +111,7 @@ La ficha de archivo muestra alumno, matrícula, documento, código clasificador,
 Ruta: `Crear > Carga Masiva`
 
 Antes de procesar, la pantalla muestra cuántos PDFs fueron seleccionados, lista los nombres de archivo, bloquea formatos no PDF, limita el lote a 20 archivos y muestra estado de procesamiento al enviar.
+
 ## 13. Bitácora
 
 Ruta: `Buscar > Bitácora`
@@ -125,7 +126,16 @@ La bitácora muestra acciones relevantes:
 
 Sirve como evidencia de trazabilidad y control institucional.
 
-## 14. Recomendaciones operativas
+## 14. Datos demo
+
+Comando:
+
+```bash
+php yii demo/seed
+```
+
+Carga información ficticia para presentación: catálogos, una caja demo, alumnos demo, documentos PDF de ejemplo y un lote de carga masiva con resultados guardado, pendiente y error. Antes de ejecutarlo, MySQL debe estar encendido y las migraciones aplicadas.
+## 16. Recomendaciones operativas
 
 - Registrar primero los catálogos base: carreras, servicios, fondos, áreas, claves y secciones.
 - Crear cajas antes de subir documentos.
