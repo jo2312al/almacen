@@ -74,15 +74,21 @@ Al guardar, el sistema:
 
 Ruta: `Buscar > Búsqueda Global`
 
-Permite localizar expedientes por matrícula, nombre del alumno, caja, nombre de documento o código clasificador. Desde los resultados se puede abrir la ficha del archivo o descargar el PDF.
+Permite localizar expedientes por matrícula, nombre del alumno, caja, nombre de documento o código clasificador. Desde los resultados se puede abrir la ficha del archivo, usar el localizador visual o descargar el PDF.
 
-## 7. Consulta por QR de caja
+## 7. Localizador visual
+
+Ruta: `Buscar > Búsqueda Global > Localizar`
+
+El localizador muestra una representación 2D del anaquel donde se encuentra el expediente. La caja objetivo aparece resaltada y la ficha lateral muestra alumno, matrícula, código clasificador, documento y ubicación física.
+
+## 8. Consulta por QR de caja
 
 Ruta: `Buscar > Caja > Ver > Vista QR`
 
 Cada caja puede generar un QR que abre una vista consultable con su ubicación física y los documentos registrados. Esta vista ayuda a demostrar que la caja física y su contenido digital están conectados.
 
-## 8. Bitácora
+## 9. Bitácora
 
 Ruta: `Buscar > Bitácora`
 
@@ -95,9 +101,7 @@ La bitácora muestra acciones relevantes:
 - resolución de pendientes.
 
 Sirve como evidencia de trazabilidad y control institucional.
-
-## 9. Recomendaciones operativas
-
+## 10. Recomendaciones operativas
 - Registrar primero los catálogos base: carreras, servicios, fondos, áreas, claves y secciones.
 - Crear cajas antes de subir documentos.
 - Revisar pendientes después de cada carga masiva.
