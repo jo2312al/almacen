@@ -11,13 +11,13 @@ $alumno = $archivo->arcAlumno;
 $anaquel = $caja ? $caja->cajAnaquel : null;
 $nivel = $caja ? $caja->cajNivel : null;
 $nombreAlumno = $alumno ? $alumno->getNombreCompleto() : 'Sin alumno asignado';
-$matricula = $alumno ? $alumno->alu_matricula : 'Sin matricula';
+$matricula = $alumno ? $alumno->alu_matricula : 'Sin matrícula';
 $cajaCodigo = $caja ? $caja->caj_codigo : 'Sin caja';
 $anaquelNombre = $anaquel ? $anaquel->ana_nombre : 'Sin anaquel';
 $nivelNombre = $nivel ? $nivel->niv_nombre : 'Sin nivel';
 
 $this->title = 'Localizador de Expediente';
-$this->params['breadcrumbs'][] = ['label' => 'Busqueda Global', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Búsqueda Global', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss(<<<CSS
@@ -237,7 +237,7 @@ CSS);
                 </div>
 
                 <?php if ($caja === null): ?>
-                    <div class="empty-map">Este archivo todavia no tiene una caja asignada.</div>
+                    <div class="empty-map">Este archivo todavía no tiene una caja asignada.</div>
                 <?php elseif (empty($cajasAnaquel)): ?>
                     <div class="empty-map">No hay mas cajas registradas en este anaquel.</div>
                 <?php else: ?>
@@ -246,7 +246,7 @@ CSS);
                             <?php $isTarget = (int)$item->caj_id === (int)$caja->caj_id; ?>
                             <div class="box-tile<?= $isTarget ? ' target' : '' ?>">
                                 <?php if ($isTarget): ?>
-                                    <div class="target-badge">Aqui</div>
+                                    <div class="target-badge">Aquí</div>
                                 <?php endif; ?>
                                 <div class="box-code"><?= Html::encode($item->caj_codigo) ?></div>
                                 <div class="box-meta">
@@ -268,11 +268,11 @@ CSS);
                     <strong><?= Html::encode($nombreAlumno) ?></strong>
                 </div>
                 <div class="info-row">
-                    <span>Matricula</span>
+                    <span>Matrícula</span>
                     <strong><?= Html::encode($matricula) ?></strong>
                 </div>
                 <div class="info-row">
-                    <span>Codigo clasificador</span>
+                    <span>Código clasificador</span>
                     <strong><?= Html::encode($archivo->arc_codigo) ?></strong>
                 </div>
                 <div class="info-row">
@@ -280,7 +280,7 @@ CSS);
                     <strong><?= Html::encode($archivo->arc_nombre_documento) ?></strong>
                 </div>
                 <div class="info-row">
-                    <span>Ubicacion fisica</span>
+                    <span>Ubicación física</span>
                     <strong><?= Html::encode($anaquelNombre) ?> / <?= Html::encode($nivelNombre) ?> / <?= Html::encode($cajaCodigo) ?></strong>
                 </div>
             </div>
