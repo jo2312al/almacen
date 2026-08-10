@@ -49,15 +49,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-expand-md navbar-azul fixed-top'],
         'togglerContent' => '<span class="navbar-toggler-icon"></span>',
     ]);
-    
+
     $menuItems = [ ['label' => 'Home', 'url' => ['/site/index']] ];
     if (!Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Crear', 'items' => [['label' => 'Archivo', 'url' => ['/archivo/create']],['label' => 'Carga Masiva', 'url' => ['/carga-masiva/create']],['label' => 'Caja', 'url' => ['/caja/create']],]];
-        $menuItems[] = ['label' => 'Buscar', 'items' => [['label' => 'Alumno', 'url' => ['/alumno/index']],['label' => 'Caja', 'url' => ['/caja/index']],['label' => 'Anaquel', 'url' => ['/anaquel/index']],]];
+        $menuItems[] = ['label' => 'Buscar', 'items' => [['label' => 'Alumno', 'url' => ['/alumno/index']],['label' => 'Caja', 'url' => ['/caja/index']],['label' => 'Anaquel', 'url' => ['/anaquel/index']],['label' => 'Bitácora', 'url' => ['/bitacora/index']],]];
         $menuItems[] = ['label' => 'Escanear', 'url' => ['/site/scan']];
-        $menuItems[] = ['label' => 'Cerrar sesión (' . Html::encode(Yii::$app->user->identity->username) . ')','url' => ['/user-management/auth/logout'],'linkOptions' => ['data-method' => 'post', 'class' => 'nav-link'],];
+        $menuItems[] = ['label' => 'Cerrar sesiÃ³n (' . Html::encode(Yii::$app->user->identity->username) . ')','url' => ['/user-management/auth/logout'],'linkOptions' => ['data-method' => 'post', 'class' => 'nav-link'],];
     } else {
-        $menuItems[] = ['label' => 'Iniciar Sesión', 'linkOptions' => ['data-bs-toggle' => 'modal','data-bs-target' => '#loginModal','style' => 'cursor: pointer;'], 'options' => ['class' => 'nav-item'],];
+        $menuItems[] = ['label' => 'Iniciar SesiÃ³n', 'linkOptions' => ['data-bs-toggle' => 'modal','data-bs-target' => '#loginModal','style' => 'cursor: pointer;'], 'options' => ['class' => 'nav-item'],];
     }
     $menuItems[] = ['label' => '<div class="theme-switch-wrapper"><input type="checkbox" id="theme-switch" class="theme-switch"><label for="theme-switch" class="theme-switch-label"></label><span class="theme-switch-icon"><i class="bi bi-sun-fill"></i><i class="bi bi-moon-fill"></i></span></div>','encode' => false,'options' => ['class' => 'nav-item'],'align' => 'right',];
     echo Nav::widget(['options' => ['class' => 'navbar-nav ms-auto'],'items' => $menuItems,]);
@@ -92,9 +92,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             <div class="wraper">
                 Carretera Villahermosa - Frontera Km. 3.5 Ciudad Industrial<br>
                 Villahermosa, Tabasco, Mexico. C.P. 86010<br>
-                Teléfonos: 01(993) 353-02-59 <a href="http://villahermosa.tecnm.mx/site/identidad.jsp?view=directoriotel">Extensiones</a><br>
-                Instituto Tecnologico de Villahermosa - Copyright © 2017 - Todos los Derechos Reservados<br>
-                <a href="/">Inicio</a> | <a href="#">Mapa del Sitio</a> | <a href="">Políticas de Privacidad</a>
+                TelÃ©fonos: 01(993) 353-02-59 <a href="http://villahermosa.tecnm.mx/site/identidad.jsp?view=directoriotel">Extensiones</a><br>
+                Instituto Tecnologico de Villahermosa - Copyright Â© 2017 - Todos los Derechos Reservados<br>
+                <a href="/">Inicio</a> | <a href="#">Mapa del Sitio</a> | <a href="">PolÃ­ticas de Privacidad</a>
                 <br><br><br>
             </div>
         </div>
@@ -102,25 +102,25 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </div>
 </footer>
 
-<!-- === CÓDIGO DEL MODAL DE LOGIN (SÓLO PARA INVITADOS) === -->
+<!-- === CÃ“DIGO DEL MODAL DE LOGIN (SÃ“LO PARA INVITADOS) === -->
 <?php if (Yii::$app->user->isGuest): ?>
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel"><i class="bi bi-person-circle me-2"></i>Iniciar Sesión</h5>
+                    <h5 class="modal-title" id="loginModalLabel"><i class="bi bi-person-circle me-2"></i>Iniciar SesiÃ³n</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- ========================================================================= -->
-                    <!-- === INICIO DE LA CORRECCIÓN DEFINITIVA ================================ -->
+                    <!-- === INICIO DE LA CORRECCIÃ“N DEFINITIVA ================================ -->
                     <!-- ========================================================================= -->
-                    <!-- El formulario ahora es un formulario normal, no AJAX. Esto es más simple y robusto. -->
+                    <!-- El formulario ahora es un formulario normal, no AJAX. Esto es mÃ¡s simple y robusto. -->
                     <?php
                     $model = new \webvimark\modules\UserManagement\models\forms\LoginForm();
                     $form = \yii\bootstrap5\ActiveForm::begin([
                         'id' => 'login-form-standalone',
-                        'action' => ['/user-management/auth/login'], // Apunta a la acción de login original de Webvimark
+                        'action' => ['/user-management/auth/login'], // Apunta a la acciÃ³n de login original de Webvimark
                         'method' => 'post',
                         'fieldConfig' => [
                             'template' => "{input}\n{error}",
@@ -131,7 +131,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'class' => 'form-control form-control-lg', 'placeholder' => 'Usuario']) ?>
                         </div>
                         <div class="mb-3">
-                            <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control form-control-lg', 'placeholder' => 'Contraseña']) ?>
+                            <?= $form->field($model, 'password')->passwordInput(['class' => 'form-control form-control-lg', 'placeholder' => 'ContraseÃ±a']) ?>
                         </div>
                         <div class="mb-3">
                             <?= $form->field($model, 'rememberMe')->checkbox() ?>
@@ -141,7 +141,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         </div>
                     <?php \yii\bootstrap5\ActiveForm::end(); ?>
                     <!-- ========================================================================= -->
-                    <!-- === FIN DE LA CORRECCIÓN ================================================= -->
+                    <!-- === FIN DE LA CORRECCIÃ“N ================================================= -->
                     <!-- ========================================================================= -->
                 </div>
             </div>
