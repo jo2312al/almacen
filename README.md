@@ -11,6 +11,7 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 ## Funcionalidad principal
 
 - Dashboard con métricas generales del archivo documental.
+- Datos demo idempotentes para preparar una presentación con un solo comando.
 - Gestión de alumnos, carreras, generaciones, periodos y servicios.
 - Gestión física: anaqueles, niveles de almacenamiento y cajas.
 - Registro individual de documentos PDF con ficha profesional de consulta.
@@ -30,20 +31,21 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 
 ## Flujo demo recomendado
 
-1. Entrar al dashboard y mostrar métricas generales.
-2. Crear o seleccionar una caja física.
-3. Ir a `Crear > Carga Masiva`.
-4. Subir varios PDFs de una caja.
-5. Mostrar el resumen del lote: guardados, pendientes y errores.
-6. Abrir un pendiente y usar `Revisar alumno`.
-7. Guardar el alumno prellenado.
-8. Ver cómo el pendiente cambia a guardado.
-9. Usar la búsqueda global para localizar un expediente en segundos.
-10. Abrir Localizar para mostrar el mapa animado de anaquel, nivel y caja.
-11. Escanear o abrir el QR de una caja para consultar su contenido digital.
-12. Abrir el reporte de cajas y exportarlo en CSV.
-13. Abrir el reporte por alumno para revisar su ficha documental.
-14. Abrir la bitácora para mostrar evidencia de trazabilidad.
+1. Ejecutar `php yii demo/seed` para cargar datos ficticios de presentación.
+2. Entrar al dashboard y mostrar métricas generales.
+3. Crear o seleccionar una caja física.
+4. Ir a `Crear > Carga Masiva`.
+5. Subir varios PDFs de una caja.
+6. Mostrar el resumen del lote: guardados, pendientes y errores.
+7. Abrir un pendiente y usar `Revisar alumno`.
+8. Guardar el alumno prellenado.
+9. Ver cómo el pendiente cambia a guardado.
+10. Usar la búsqueda global para localizar un expediente en segundos.
+11. Abrir Localizar para mostrar el mapa animado de anaquel, nivel y caja.
+12. Escanear o abrir el QR de una caja para consultar su contenido digital.
+13. Abrir el reporte de cajas y exportarlo en CSV.
+14. Abrir el reporte por alumno para revisar su ficha documental.
+15. Abrir la bitácora para mostrar evidencia de trazabilidad.
 
 ## Módulos principales
 
@@ -139,10 +141,20 @@ Tablas principales:
 - Respaldar base de datos y carpeta `web/archivos`.
 - Revisar permisos de escritura en `runtime`, `web/assets` y `web/archivos`.
 
+
+## Datos demo
+
+Para preparar una presentación local después de crear la base de datos y ejecutar migraciones:
+
+```bash
+php yii demo/seed
+```
+
+El comando crea datos ficticios reutilizables: anaquel, niveles, cajas, alumnos, expedientes PDF de muestra y un lote de carga masiva con estados guardado, pendiente y error. Es idempotente: puede ejecutarse varias veces sin duplicar la semilla principal.
 ## Manual
 
 Consulta [MANUAL_USUARIO.md](MANUAL_USUARIO.md) para el flujo de operación.
 
 ## Estado del proyecto
 
-El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global, localizador visual, consulta de cajas por QR y reportes exportables por caja y alumno. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
+El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global, localizador visual, consulta de cajas por QR y reportes exportables por caja y alumno, además de datos demo para presentación. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
