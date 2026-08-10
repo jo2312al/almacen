@@ -94,7 +94,24 @@ Ruta: `Reportes > Reporte de Cajas`
 
 Muestra cada caja con su anaquel, nivel y cantidad de documentos registrados. Desde esta vista se puede abrir la caja, consultar su vista QR o exportar el reporte en CSV para revisarlo en Excel.
 
-## 10. Bitácora
+## 10. Reporte por alumno
+
+Ruta: `Reportes > Reporte por Alumno`
+
+Permite abrir una ficha documental por alumno con sus datos principales, expedientes registrados, código clasificador, caja, anaquel y nivel. La ficha puede imprimirse o exportarse en CSV.
+
+## 11. Vista profesional de archivo
+
+Ruta: `Buscar > Búsqueda Global > Ver`
+
+La ficha de archivo muestra alumno, matrícula, documento, código clasificador, ubicación física y clasificación documental. Desde la misma pantalla se puede descargar el PDF, abrir el localizador visual, consultar la vista QR de la caja o abrir el reporte del alumno.
+
+## 12. Validaciones de carga masiva
+
+Ruta: `Crear > Carga Masiva`
+
+Antes de procesar, la pantalla muestra cuántos PDFs fueron seleccionados, lista los nombres de archivo, bloquea formatos no PDF, limita el lote a 20 archivos y muestra estado de procesamiento al enviar.
+## 13. Bitácora
 
 Ruta: `Buscar > Bitácora`
 
@@ -107,7 +124,9 @@ La bitácora muestra acciones relevantes:
 - resolución de pendientes.
 
 Sirve como evidencia de trazabilidad y control institucional.
-## 11. Recomendaciones operativas
+
+## 14. Recomendaciones operativas
+
 - Registrar primero los catálogos base: carreras, servicios, fondos, áreas, claves y secciones.
 - Crear cajas antes de subir documentos.
 - Revisar pendientes después de cada carga masiva.

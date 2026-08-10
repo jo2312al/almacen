@@ -13,15 +13,21 @@ class CargaMasivaForm extends Model
     public $seccion_serie_id;
     public $files;
 
+    /**
+     * Define validaciones de caja, clasificación y PDFs del lote.
+     */
     public function rules()
     {
         return [
             [['caja_id'], 'required'],
             [['caja_id', 'fondo_id', 'clave_programatica_id', 'area_generadora_id', 'seccion_serie_id'], 'integer'],
-            [['files'], 'file', 'extensions' => 'pdf', 'maxFiles' => 20, 'maxSize' => 20 * 1024 * 1024],
+            [['files'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf', 'maxFiles' => 20, 'maxSize' => 20 * 1024 * 1024],
         ];
     }
 
+    /**
+     * Etiquetas visibles del formulario de carga masiva.
+     */
     public function attributeLabels()
     {
         return [
