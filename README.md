@@ -20,6 +20,7 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 - Revisión de alumno pendiente con formulario prellenado.
 - Bitácora de acciones relevantes del sistema.
 - Búsqueda global por matrícula, alumno, caja, documento o código clasificador.
+- Localizador visual animado para ubicar físicamente un expediente en anaquel, nivel y caja.
 - Vista consultable por QR para revisar el contenido digital de una caja.
 - Descarga y consulta de archivos registrados.
 - Generación de códigos de caja y soporte para QR.
@@ -36,8 +37,9 @@ ASSRP permite digitalizar una caja completa, detectar datos de alumnos desde PDF
 7. Guardar el alumno prellenado.
 8. Ver cómo el pendiente cambia a guardado.
 9. Usar la búsqueda global para localizar un expediente en segundos.
-10. Escanear o abrir el QR de una caja para consultar su contenido digital.
-11. Abrir la bitácora para mostrar evidencia de trazabilidad.
+10. Abrir Localizar para mostrar el mapa animado de anaquel, nivel y caja.
+11. Escanear o abrir el QR de una caja para consultar su contenido digital.
+12. Abrir la bitácora para mostrar evidencia de trazabilidad.
 
 ## Módulos principales
 
@@ -139,4 +141,4 @@ Consulta [MANUAL_USUARIO.md](MANUAL_USUARIO.md) para el flujo de operación.
 
 ## Estado del proyecto
 
-El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global y consulta de cajas por QR. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.
+El sistema ya cuenta con carga individual, carga masiva por caja, revisión de alumnos pendientes, dashboard, bitácora, búsqueda global, localizador visual y consulta de cajas por QR. Como trabajo futuro se recomienda fortalecer reportes, respaldos automatizados y pruebas funcionales.

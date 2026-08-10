@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use app\models\Archivo;
+use app\models\Caja;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class BusquedaController extends Controller
 {
@@ -46,6 +48,34 @@ class BusquedaController extends Controller
         return $this->render('index', [
             'q' => $q,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionLocalizar($arc_id)
+    {
+        $archivo = Archivo::find()
+            ->with(['arcAlumno', 'arcCaja.cajAnaquel', 'arcCaja.cajNivel'])
+            ->where(['arc_id' => $arc_id])
+            ->one();
+
+        if ($archivo === null) {
+            throw new NotFoundHttpException('El archivo solicitado no existe.');
+        }
+
+        $caja = $archivo->arcCaja;
+        $cajasAnaquel = [];
+        if ($caja !== null && $caja->caj_anaquel_id !== null) {
+            $cajasAnaquel = Caja::find()
+                ->with(['cajAnaquel', 'cajNivel', 'archivos'])
+                ->where(['caj_anaquel_id' => $caja->caj_anaquel_id])
+                ->orderBy(['caj_nivel_id' => SORT_ASC, 'caj_codigo' => SORT_ASC])
+                ->all();
+        }
+
+        return $this->render('localizar', [
+            'archivo' => $archivo,
+            'caja' => $caja,
+            'cajasAnaquel' => $cajasAnaquel,
         ]);
     }
 }

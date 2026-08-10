@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a('Localizar', ['/busqueda/localizar', 'arc_id' => $model->arc_id], ['class' => 'btn btn-info']) ?>
         <?= Html::a('Update', ['update', 'arc_id' => $model->arc_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'arc_id' => $model->arc_id], [
             'class' => 'btn btn-danger',

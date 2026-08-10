@@ -66,6 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Acciones',
                         'format' => 'raw',
                         'value' => fn($model) => Html::a('Ver', ['/archivo/view', 'arc_id' => $model->arc_id], ['class' => 'btn btn-sm btn-outline-primary'])
+                            . ' ' . Html::a('Localizar', ['/busqueda/localizar', 'arc_id' => $model->arc_id], ['class' => 'btn btn-sm btn-outline-info'])
                             . ' ' . Html::a('Descargar', ['/archivo/download', 'id' => $model->arc_id], ['class' => 'btn btn-sm btn-outline-success']),
                     ],
                 ],
