@@ -8,6 +8,11 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
+    'modules' => [
+        'user-management' => [
+            'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+        ],
+    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
