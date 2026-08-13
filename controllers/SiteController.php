@@ -4,13 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\Response;
-use app\models\Alumno;
-use app\models\Archivo;
-use app\models\BitacoraAccion;
-use app\models\Caja;
-use app\models\CargaMasiva;
-use app\models\CargaMasivaDetalle;
 
 class SiteController extends Controller
 {
@@ -41,11 +34,8 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->render('portada');
         }
-        return $this->render('index-role', [
-            'metrics' => $this->dashboardMetrics(),
-            'recentLoads' => CargaMasiva::find()->with('caja')->orderBy(['car_id' => SORT_DESC])->limit(5)->all(),
-            'recentActions' => BitacoraAccion::find()->orderBy(['bit_id' => SORT_DESC])->limit(6)->all(),
-        ]);
+
+        return $this->render('index');
     }
 
     public function actionIndexUsuario()
@@ -83,17 +73,5 @@ class SiteController extends Controller
     public function actionScan()
     {
         return $this->render('scan');
-    }
-
-    private function dashboardMetrics()
-    {
-        return [
-            'alumnos' => Alumno::find()->count(),
-            'cajas' => Caja::find()->count(),
-            'archivos' => Archivo::find()->count(),
-            'cargas' => CargaMasiva::find()->count(),
-            'pendientes' => CargaMasivaDetalle::find()->where(['det_estado' => CargaMasivaDetalle::ESTADO_PENDIENTE])->count(),
-            'errores' => CargaMasivaDetalle::find()->where(['det_estado' => CargaMasivaDetalle::ESTADO_ERROR])->count(),
-        ];
     }
 }

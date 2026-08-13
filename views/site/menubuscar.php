@@ -1,39 +1,29 @@
 <?php
+use app\components\RbacAccess;
 use yii\helpers\Url;
-/** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+/** @var yii\web\View $this */
+$this->title = 'Buscar';
+$items = [
+    ['Alumno', 'bi-person-plus-fill', ['/alumno/index'], RbacAccess::can('alumno.ver')],
+    ['Caja', 'bi-box2-fill', ['/caja/index'], RbacAccess::can('caja.ver')],
+    ['Anaquel', 'bi-hdd-stack-fill', ['/anaquel/index'], RbacAccess::can('catalogo.ver')],
+    ['Documentos', 'bi-file-earmark-text', ['/archivo/index'], RbacAccess::can('archivo.ver')],
+    ['Busqueda Global', 'bi-binoculars', ['/busqueda/index'], RbacAccess::can('archivo.ver')],
+];
+$visibleItems = array_filter($items, static fn($item) => $item[3]);
 ?>
 <div class="site-index">
-<div class="d-flex justify-content-center align-items-center" style="gap: 40px; height: fit-content;">
-    <!-- Botón de "Crear" -->
-    <div class="d-flex flex-column align-items-center">
-        <a href="<?= Url::to(['/alumno/index']) ?>">
-            <button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;">
-                <i class="bi bi-person-plus-fill" style="font-size: 2.5rem;"></i>
-            </button>
-        </a>
-        <label class="mt-2 text-center">Alumno</label>
+    <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap: 40px; height: fit-content;">
+        <?php foreach ($visibleItems as [$label, $icon, $url]): ?>
+            <div class="d-flex flex-column align-items-center">
+                <a href="<?= Url::to($url) ?>">
+                    <button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                        <i class="bi <?= $icon ?>" style="font-size: 2.5rem;"></i>
+                    </button>
+                </a>
+                <label class="mt-2 text-center"><?= $label ?></label>
+            </div>
+        <?php endforeach; ?>
     </div>
-
-    <!-- Botón de "Escanear" -->
-    <div class="d-flex flex-column align-items-center">
-        <a href="<?= Url::to(['/caja/index']) ?>">
-            <button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;">
-                <i class="bi bi-box2-fill" style="font-size: 2.5rem;"></i>
-            </button>
-        </a>
-        <label class="mt-2 text-center">Caja</label>
-    </div>
-
-    <!-- Botón de "Buscar" -->
-    <div class="d-flex flex-column align-items-center">
-        <a href="<?= Url::to(['/anaquel/index']) ?>">
-            <button class="btn btn-primary rounded-circle custom-btn" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding: 0;">
-                <i class="bi bi-hdd-stack-fill" style="font-size: 2.5rem;"></i>
-            </button>
-        </a>
-        <label class="mt-2 text-center">Anaquel</label>
-    </div>
-</div>
 </div>
