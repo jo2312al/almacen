@@ -65,6 +65,9 @@ class CajaController extends Controller
     public function actionConsulta($caj_id)
     {
         $model = $this->findModel($caj_id);
+        if (Yii::$app->user->isGuest) {
+            return $this->render('consulta-publica', ['model' => $model]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $model->getArchivos()
                 ->with('arcAlumno')
@@ -105,6 +108,15 @@ class CajaController extends Controller
         ]);
     }
 
+    public function actionUpdate($caj_id)
+    {
+        $model = $this->findModel($caj_id);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'caj_id' => $model->caj_id]);
+        }
+        return $this->render('update', ['model' => $model]);
+    }
+
     /**
      * Generates and downloads the QR code image.
      */
@@ -133,7 +145,12 @@ class CajaController extends Controller
      */
     public function actionDelete($caj_id)
     {
-        $this->findModel($caj_id)->delete();
+        $model = $this->findModel($caj_id);
+        if ($model->getArchivos()->exists()) {
+            Yii::$app->session->setFlash('error', 'No se puede eliminar una caja que contiene documentos. Reasigna primero su contenido.');
+            return $this->redirect(['view', 'caj_id' => $caj_id]);
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }

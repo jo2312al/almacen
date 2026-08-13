@@ -125,9 +125,27 @@ class AlumnoController extends Controller
         }
     }
 
-    public function actionGenerarQr() { /* ... Tu código existente ... */ }
-    public function actionUpdate($alu_id) { /* ... Tu código existente ... */ }
-    public function actionDelete($alu_id) { /* ... Tu código existente ... */ }
+    public function actionUpdate($alu_id)
+    {
+        $model = $this->findModel($alu_id);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            BitacoraService::registrar('editar', 'alumno', $model->alu_id, 'Alumno actualizado: ' . $model->alu_matricula);
+            return $this->redirect(['view', 'alu_id' => $model->alu_id]);
+        }
+        return $this->render('update', ['model' => $model]);
+    }
+
+    public function actionDelete($alu_id)
+    {
+        $model = $this->findModel($alu_id);
+        if ($model->getArchivos()->exists()) {
+            Yii::$app->session->setFlash('error', 'No se puede eliminar un alumno con documentos asociados.');
+            return $this->redirect(['view', 'alu_id' => $alu_id]);
+        }
+        BitacoraService::registrar('eliminar', 'alumno', $model->alu_id, 'Alumno eliminado: ' . $model->alu_matricula);
+        $model->delete();
+        return $this->redirect(['index']);
+    }
 
     /**
      * Finds the Alumno model based on its primary key value.

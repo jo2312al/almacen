@@ -60,9 +60,9 @@ $config = [
             'loginUrl' => ['/site/index'],
             'on afterLogin' => function ($event) {
                 $user = Yii::$app->user;
-                if ($user->can('admin')) {
+                if ($user->can('adminsuperior') || $user->can('admin') || $user->can('usuario') || $user->can('viewer')) {
                     // Ahora redirige al dashboard de AdminLTE3
-                    Yii::$app->response->redirect(['/admin'])->send();
+                    Yii::$app->response->redirect(['/site/index'])->send();
                 } elseif ($user->can('prueba')) {
                     Yii::$app->response->redirect(['/site/index-usuario'])->send();
                 } elseif ($user->can('viewer')) {
@@ -115,6 +115,7 @@ $config = [
             ],
         ],
     ],
+    'on beforeAction' => [app\components\RouteAccessPolicy::class, 'beforeAction'],
     'on beforeRequest' => function () {
         if (Yii::$app->session->has('language')) {
             Yii::$app->language = Yii::$app->session->get('language');

@@ -38,7 +38,10 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index', [
+        if (Yii::$app->user->isGuest) {
+            return $this->render('portada');
+        }
+        return $this->render('index-role', [
             'metrics' => $this->dashboardMetrics(),
             'recentLoads' => CargaMasiva::find()->with('caja')->orderBy(['car_id' => SORT_DESC])->limit(5)->all(),
             'recentActions' => BitacoraAccion::find()->orderBy(['bit_id' => SORT_DESC])->limit(6)->all(),
@@ -58,6 +61,16 @@ class SiteController extends Controller
     public function actionMenubuscar()
     {
         return $this->render('menubuscar');
+    }
+
+    public function actionReportes()
+    {
+        return $this->render('reportes');
+    }
+
+    public function actionCatalogos()
+    {
+        return $this->render('catalogos');
     }
 
     public function actionLogout()

@@ -10,6 +10,7 @@ use app\services\ArchivoStorageService; // Servicio Archivos
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
 /**
@@ -25,6 +26,17 @@ class ArchivoController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        ['allow' => true, 'actions' => ['index', 'view'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.ver')],
+                        ['allow' => true, 'actions' => ['create'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.crear')],
+                        ['allow' => true, 'actions' => ['update'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.editar') || Yii::$app->user->can('archivo.editar_propios')],
+                        ['allow' => true, 'actions' => ['download'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.descargar')],
+                        ['allow' => true, 'actions' => ['delete'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.eliminar')],
+                        ['allow' => true, 'actions' => ['process-pdf'], 'matchCallback' => fn() => Yii::$app->user->can('archivo.procesar')],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -40,9 +52,6 @@ class ArchivoController extends Controller
      */
     public function beforeAction($action)
     {
-        if (in_array($action->id, ['process-pdf', 'get-codigos'])) {
-            $this->enableCsrfValidation = false;
-        }
         return parent::beforeAction($action);
     }
 

@@ -20,6 +20,6 @@ class Module extends \yii\base\Module
         parent::init();
 
         // Esto es crucial: le decimos al módulo que use el layout de AdminLTE3.
-        $this->layout = '@vendor/hail812/yii2-adminlte3/src/views/layouts/main';
+        $this->layout = '@app/views/layouts/main';
     }
 }
