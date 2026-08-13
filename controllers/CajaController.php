@@ -129,13 +129,13 @@ class CajaController extends Controller
             // Configuramos la respuesta HTTP para descarga de archivo
             Yii::$app->response->format = Response::FORMAT_RAW;
             Yii::$app->response->headers
-                ->add('Content-Type', 'image/png')
+                ->add('Content-Type', $qrData['contentType'])
                 ->add('Content-Disposition', 'attachment; filename="' . $qrData['filename'] . '"')
                 ->add('Cache-Control', 'no-cache');
 
             return $qrData['content'];
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \yii\web\HttpException(500, 'No se pudo generar el código QR.');
         }
     }

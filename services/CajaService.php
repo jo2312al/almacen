@@ -7,6 +7,9 @@ use app\models\Caja;
 use app\models\Anaquel;
 use app\models\Nivelalmacenamiento;
 use yii\helpers\Url;
+use Da\QrCode\Contracts\ErrorCorrectionLevelInterface;
+use Da\QrCode\QrCode;
+use Da\QrCode\Writer\SvgWriter;
 
 /**
  * Servicio encargado de la lógica de negocio de las Cajas.
@@ -72,26 +75,22 @@ class CajaService
     public function generateQrImage($caj_id)
     {
         try {
-            // Asumimos que tienes configurado el componente 'qr' en web.php
-            $qr = Yii::$app->get('qr');
-
-            // Construye la URL absoluta hacia la consulta de la caja
+            // Construye la URL absoluta hacia la consulta de la caja.
             $qrText = Url::to(['caja/consulta', 'caj_id' => $caj_id], true);
-            $fileName = 'qr_caja_' . $caj_id . '.png';
+            $fileName = 'qr_caja_' . $caj_id . '.svg';
 
-            // Genera la imagen del QR en memoria
-            $qrImageContent = $qr
-                ->setText($qrText)
-                ->setSize(300)
-                ->setErrorCorrectionLevel('H')
-                ->writeString();
+            // SVG no requiere Imagick y funciona directo en navegador.
+            $qr = (new QrCode($qrText, ErrorCorrectionLevelInterface::HIGH, new SvgWriter()))
+                ->setSize(300);
+            $qrImageContent = $qr->writeString();
 
             return [
                 'content' => $qrImageContent,
-                'filename' => $fileName
+                'filename' => $fileName,
+                'contentType' => $qr->getContentType(),
             ];
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Yii::error('Error generando QR: ' . $e->getMessage(), __METHOD__);
             throw $e;
         }
