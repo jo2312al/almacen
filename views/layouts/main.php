@@ -58,7 +58,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Cerrar sesión (' . Html::encode(Yii::$app->user->identity->username) . ')', 'url' => ['/user-management/auth/logout'], 'linkOptions' => ['data-method' => 'post']],
         ]];
     } else {
-        $menuItems[] = ['label' => 'Iniciar sesión', 'url' => ['/user-management/auth/login']];
+        $menuItems[] = ['label' => 'Iniciar sesión', 'url' => '#', 'linkOptions' => ['data-bs-toggle' => 'modal', 'data-bs-target' => '#loginModal']];
     }
     echo Nav::widget(['options' => ['class' => 'navbar-nav ms-auto'], 'items' => $menuItems]);    NavBar::end();
     ?>
@@ -146,6 +146,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             </div>
         </div>
     </div>
+<?php endif; ?>
+
+<?php if (Yii::$app->user->isGuest && Yii::$app->request->get('login')): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('loginModal');
+        if (modal && window.bootstrap) {
+            window.bootstrap.Modal.getOrCreateInstance(modal).show();
+        }
+    });
+</script>
 <?php endif; ?>
 
 <?php $this->endBody() ?>

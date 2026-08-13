@@ -46,7 +46,17 @@ final class RouteAccessPolicy
     public static function beforeAction(ActionEvent $event): void
     {
         $route = $event->action->uniqueId;
+
+        if ($route === 'user-management/auth/login' && Yii::$app->request->isGet) {
+            Yii::$app->response->redirect(['/site/index', 'login' => 1])->send();
+            $event->isValid = false;
+            return;
+        }
         if (in_array($route, self::PUBLIC_ROUTES, true)) {
+            return;
+        }
+
+        if (!Yii::$app->user->isGuest && (Yii::$app->user->can('superadmin') || Yii::$app->user->can('adminsuperior'))) {
             return;
         }
 
@@ -80,7 +90,7 @@ final class RouteAccessPolicy
 
         if (!$allowed) {
             if (Yii::$app->user->isGuest) {
-                Yii::$app->user->loginRequired();
+                Yii::$app->response->redirect(['/site/index', 'login' => 1])->send();
                 $event->isValid = false;
                 return;
             }

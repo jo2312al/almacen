@@ -4,15 +4,20 @@ namespace app\components;
 
 use Yii;
 
-/**
- * Helpers de autorización y visibilidad. La autorización real se valida también
- * en los controladores mediante AccessControl.
- */
+/** Helpers de autorizacion y visibilidad del sistema. */
 final class RbacAccess
 {
     public static function can(string $permission): bool
     {
-        return !Yii::$app->user->isGuest && Yii::$app->user->can($permission);
+        if (Yii::$app->user->isGuest) {
+            return false;
+        }
+
+        if (Yii::$app->user->can('superadmin') || Yii::$app->user->can('adminsuperior')) {
+            return true;
+        }
+
+        return Yii::$app->user->can($permission);
     }
 
     public static function role(): string
@@ -21,7 +26,11 @@ final class RbacAccess
             return 'invitado';
         }
 
-        foreach (['adminsuperior', 'admin', 'usuario', 'viewer'] as $role) {
+        if (Yii::$app->user->can('superadmin') || Yii::$app->user->can('adminsuperior')) {
+            return 'adminsuperior';
+        }
+
+        foreach (['admin', 'usuario', 'viewer'] as $role) {
             if (Yii::$app->user->can($role)) {
                 return $role;
             }
